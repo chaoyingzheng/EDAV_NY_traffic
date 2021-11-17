@@ -1,1 +1,3 @@
 # Missing values
+
+There is no obvious missing pattern that will affect the analysis in our dataset. Rows contain missing value are dropped from the dataset. Some columns have value as "Unknown" or "Not Applicable", which is considered as a valid entry instead of missing value. 
