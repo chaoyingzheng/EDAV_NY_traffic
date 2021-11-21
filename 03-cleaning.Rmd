@@ -1,1 +1,8 @@
 # Data transformation
+
+
+```{r message=FALSE, warning=FALSE}
+
+library(readr)
+cash_information <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information.csv")
+```

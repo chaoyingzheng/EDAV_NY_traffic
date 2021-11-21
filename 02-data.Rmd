@@ -1,2 +1,28 @@
 # Data sources
 
+### Data Description
+
+source: https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe
+collector:
+number of records:
+
+### Columns Description
+
+"Year"
+"Crash Descriptor"
+"Time"
+"Date"
+"Day of Week"
+"Police Report"
+"Lighting Conditions"
+"Municipality"
+"Collision Type Descriptor"
+"County Name"
+"Road Descriptor"
+"Weather Conditions"
+"Traffic Control Device"
+"Road Surface Conditions"
+"DOT Reference Marker Location"
+"Pedestrian Bicyclist Action"
+"Event Descriptor"
+"Number of Vehicles Involved"

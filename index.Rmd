@@ -7,3 +7,12 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+
+### Background
+
+
+### Problem Statement
+
+1. Where and When car crashes happen the most in New York? Which month in a year, which day in a week, etc. For example, is there a day in the week that a motor vehicle crash is more likely to happen? 
+2. What are the most frequent events (reasons) of motor vehicle crashes? What are the common patterns of the road, light and weather conditions? Will the proportion of different types of crashes vary by year? 
+3. What’s the severity of the car crashes? How many people were injured or died in the car crashes? 

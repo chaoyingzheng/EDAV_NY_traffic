@@ -3,6 +3,6 @@ bookdown::gitbook:
   config:
     toc:
       before: |
-        <li><a href="./">NY traffic</a></li>
+        <li><a href="./">NY Motor Vehicle Crashes Analysis 2018-2019</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
