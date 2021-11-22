@@ -7,3 +7,11 @@ interactive-component
 conclusion
 data-description
 columns-description
+background
+problem-statement
+remove-columns
+change-format-of-variable-date
+extract-reason-of-crashing-from-variable-event-descriptor
+collision_type
+collision_detail
+convert-to-factor-level

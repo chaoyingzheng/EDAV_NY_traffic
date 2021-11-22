@@ -1,8 +1,100 @@
 # Data transformation
 
+## Remove Columns
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 
 library(readr)
-cash_information <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information.csv")
+cash_information_raw <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information.csv")
+
+# drop columns
+cash_information <- subset(cash_information_raw, 
+                           select =-c(`Municipality`, `Police Report`, `DOT Reference Marker Location`, `Pedestrian Bicyclist Action`))
+```
+
+
+Here is the overview of columns information before cleaning. First, variable `Date` need to convert to class `Date` in format "Year-Month-Day". Second, variable `Event Descriptor` will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor. 
+
+```{r echo=FALSE}
+str(cash_information)
+```
+
+## Change Format of Variable `Date` 
+
+Here is the view of variable `Date` before the transformation. 
+```{r echo=FALSE}
+print(cash_information$Date[1])
+print(class(cash_information$Date))
+```
+Here is the view of variable `Date` after the transformation. 
+```{r  echo=FALSE}
+# transform variable `Date` to date format
+cash_information$Date <- as.Date(cash_information$Date, format="%m/%d/%Y")
+print(cash_information$Date[1])
+print(class(cash_information$Date))
+```
+
+## Extract reason of crashing from variable `Event Descriptor`
+
+### `Collision_Type`
+Following it the current levels in `Event Descriptor`. For generalization, new variable `Collision_Type` is introduced to indicate the high-level collision type: "Collision With Fixed Object", "Collision With Unfixed Object" (will be shortened as "Collision With" in the table), and "Non-collision"
+
+For generating new variable `Collision_Type`, two changes needed:
+1. "Deer" can be included in "Animal, Collision With" 
+2. "Other Pedestrian" can be included in "Other Pedestrian, Collision With"
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+levels(factor(cash_information$`Event Descriptor`))
+```
+
+```{r echo=FALSE}
+cash_information <- cash_information %>% 
+  mutate(`Event Descriptor` = ifelse(`Event Descriptor`=="Deer", "Animal, Collision With",`Event Descriptor`)) %>% 
+  mutate(`Event Descriptor` = ifelse(`Event Descriptor`=="Other Pedestrian", "Other Pedestrian, Collision With",`Event Descriptor`))
+```
+
+After cleaning and extracting keywords from `Event Descriptor`, here are the levels for variable `Collision_Type`:
+```{r echo=FALSE}
+
+# reference code for analyzing only
+event_descriptor <- levels(factor(cash_information $`Event Descriptor`))
+collision_type <- c()
+for (i in event_descriptor){
+  collision_type <- c(collision_type, sub(".*,", "", i))
+}
+
+# actual code for generating new variable
+cash_information <- cash_information %>% mutate(Collision_Type = sub(".*,","", `Event Descriptor`))
+levels(factor(cash_information$Collision_Type))
+```
+
+
+### `Collision_Detail`
+Besides the general collision type information, `Event Descriptor` also told us the collision details, which will be stored in new variable `Collision_Detail`. Following is the view of collision details before data cleaning. 
+```{r echo=FALSE}
+event_descriptor <- levels(factor(cash_information $`Event Descriptor`))
+collision_type <- c()
+for (i in event_descriptor){
+  collision_type <- c(collision_type, sub(",.*", "", i))
+}
+levels(factor(collision_type))
+```
+In the above categories, "Other Pedestrian" and "Pedestrian" are represented the same collision type, so they can combine into the same class "Pedestrian". The following shows the final 30 levels in `Collision_Detail`.
+```{r echo=FALSE}
+cash_information <- cash_information %>% 
+  mutate(Collision_Detail = sub(",.*","", `Event Descriptor`)) %>% 
+  mutate(Collision_Detail = ifelse(Collision_Detail=="Other Pedestrian", "Pedestrian", Collision_Detail))
+
+levels(factor(cash_information$Collision_Detail))
+```
+
+
+## Convert to Factor Level
+Finally, all the variable type convert to factor level for our further data analysis. Here is the table sumamary:
+```{r echo=FALSE}
+
+cash_information[sapply(cash_information, is.character)] <- lapply(cash_information[sapply(cash_information, is.character)], as.factor)
+str(cash_information)
 ```
