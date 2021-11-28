@@ -1,1 +1,101 @@
 # Results
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(readr)
+df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
+```
+
+## When
+```{r include=FALSE}
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(patchwork)
+```
+
+### Time in Day
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+df_time <- df %>% select(Time, Year) %>%
+  mutate(hour = hour(Time)) %>%
+  group_by(hour, Year) %>%
+  summarize(n = n()) %>%
+  ungroup()
+
+ggplot(df_time, aes(hour,n, fill=factor(Year))) + 
+  geom_bar(stat="identity", position=position_dodge()) + 
+  scale_fill_brewer(palette="Set2") +
+  theme_minimal()
+```
+
+### Day of Week
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+df %>%
+  select(`Day of Week`, Year) %>%
+  group_by(`Day of Week`, Year) %>%
+  summarise(n=n()) %>%
+  ungroup() %>%
+  
+ggplot(aes(fct_relevel(`Day of Week`, "Monday", "Tuesday", "Wednesday","Thursday", "Friday", "Saturday", "Sunday"),n,  fill=factor(Year))) +
+  geom_bar(stat="identity", position=position_dodge()) + 
+  scale_fill_brewer(palette="Set2") +
+  labs(x="Day of Week", y="Frequency") +
+  theme_minimal()
+```
+
+### Month of Year
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+df %>% select(Date) %>%
+  mutate(Month = month(Date)) %>%
+  group_by(Month) %>%
+  summarize(n = n()) %>%
+
+ggplot(aes(factor(Month),n)) + 
+  geom_col(fill="#2470b9") +
+  labs(x="Month", y="Frequency") +
+  theme_minimal()
+```
+
+
+## Where
+```{r echo=FALSE, fig.height=9, fig.width=16, message=FALSE, warning=FALSE}
+ny_county <- subset(map_data("county"), region == "new york") 
+  
+df_county <- right_join(df %>% 
+                         group_by(`County Name`) %>%
+                         summarise(n=n()) %>%
+                         mutate(subregion = sub("\\.", "",tolower(`County Name`))) %>%
+                         select(subregion, n), 
+                       ny_county, 
+                       by = "subregion") %>%
+  select(subregion, n, long, lat, group) %>%
+  drop_na()
+
+lower_state <- df_county %>% 
+  filter(n>50000) %>% 
+  group_by(subregion) %>% 
+  summarise(long=mean(long), lat=mean(lat))
+
+embed_plot <- df_county %>% 
+  filter(n>50000) %>%
+ggplot(aes(x=long, y=lat)) +
+  geom_polygon(aes(group = group, fill=n), color = "grey") +
+  with(lower_state, annotate(geom="text", x = long, y = lat,
+                             label=subregion, size=2)) +
+  labs(title = "Long Island Details", x = "longitude", y = "latitude") +
+  scale_fill_gradient(low="white", high="darkgreen") +
+  theme(panel.background = element_blank()) 
+
+ny_county_distinct <- ny_county %>% 
+  group_by(subregion) %>% 
+  summarise(long=mean(long), lat=mean(lat))
+
+ggplot(data=df_county, aes(x=long, y=lat)) +
+  geom_polygon(aes(group = group, fill=n), color = "grey") +
+  with(ny_county_distinct, annotate(geom="text", x = long, y = lat, 
+                                    label=subregion, size=3)) +
+  labs(title = "New York State Crash by Counties", x = "longitude", y = "latitude") +
+  scale_fill_gradient(low="white", high="darkgreen") +
+  theme(panel.background = element_blank(), plot.title = element_text(hjust = 0.5)) +
+  inset_element(embed_plot,0.01, 0.01, 0.35, 0.35)
+```
+

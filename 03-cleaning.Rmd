@@ -1,6 +1,6 @@
 # Data transformation
 
-## Remove Columns
+## Overviews
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
@@ -13,7 +13,7 @@ cash_information <- subset(cash_information_raw,
 ```
 
 
-Here is the overview of columns information before cleaning. First, variable `Date` need to convert to class `Date` in format "Year-Month-Day". Second, variable `Event Descriptor` will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor. 
+Here is the overview of columns we need for this project before cleaning. First, variable `Date` need to convert to class `Date` in format "Year-Month-Day". Second, variable `Event Descriptor` will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor. 
 
 ```{r echo=FALSE}
 str(cash_information)
