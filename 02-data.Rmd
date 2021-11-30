@@ -2,17 +2,18 @@
 
 ### Data Description
 
-source: https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe
-collector:
-number of records:
+Source: https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe
+
+The data set we used are coming from the New York State government data website
+(www.data.ny.gov), specifically provided by the NYS Department of Motor Vehicles. The data set was collected by the Crash Records Center, contains statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.  
 
 ### Columns Description
-
-"Year"
-"Crash Descriptor"
-"Time"
-"Date"
-"Day of Week"
+The raw data set contains of 881,617 observations with 18 variables, including the following
+"Year": 
+"Crash Descriptor": 
+"Time": 
+"Date": 
+"Day of Week": 
 "Police Report"
 "Lighting Conditions"
 "Municipality"
