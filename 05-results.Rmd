@@ -17,6 +17,7 @@ library(patchwork)
 ```
 
 ### Time in Day
+First, we explore when crashes happen the most, and the corresponding reasons. (Todo: x-axis label update to 0:00?)
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 df_time <- df %>% select(Time, Year) %>%
   mutate(hour = hour(Time)) %>%
@@ -29,7 +30,11 @@ ggplot(df_time, aes(hour,n, fill=factor(Year))) +
   scale_fill_brewer(palette="Set2") +
   theme_minimal()
 ```
+Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that `Lighting Conditions`, `Road Descriptor`, `Traffic Control Device`, `Crash Descriptor` and `Collision Type Descriptor` are highly correlated with the hour in a day. The following histograms will examine this assumption. Also we will use `Collision_Detail` to see what the actual reasons for crashing in each hour. 
+
 ```{r fig.height=15, fig.width=20}
+
+# Extract Columns for Time Analysis and Data Cleaning 
 df_time_reason<- df %>% 
   mutate(time_hour = hour(Time)) %>%
   mutate(time_hour = factor(time_hour), 
@@ -91,7 +96,8 @@ mosaic(CollisionTypeDescriptor~time_hour, direction=c("v", "h"), t6)
 
 
 
-
+Todo: analysis, add each col's level in the description/analysis, conclude whether correlated with time
+Todo (code): x-axis label clean up(rotation or abbreviate), add full name if abbreviate
 
 ```{r fig.width=10, message=FALSE, warning=FALSE, echo=FALSE}
 df_time_reason %>% 
@@ -99,7 +105,7 @@ df_time_reason %>%
   summarise(n=n()) %>%
   ungroup() %>%
   ggplot(aes(x=fct_relevel(factor(Lighting), "Unknown", after=Inf), y=n)) + 
-  geom_col()+ 
+  geom_col(fill="#8da675")+ 
   facet_wrap(~time_hour, nrow=4, ncol=6)+ 
   labs(x="", y="", title="Lighting Condition vs Time") + theme_bw()
 
@@ -108,7 +114,7 @@ df_time_reason %>%
   summarise(n=n()) %>%
   ungroup() %>%
   ggplot(aes(x=fct_relevel(factor(RoadDescriptor), "U", after=Inf), y=n)) + 
-  geom_col()+ 
+  geom_col(fill="#8da675")+ 
   facet_wrap(~time_hour, nrow=4, ncol=6)+ 
   labs(x="", y="", title="Road Descriptor vs Time")
   
@@ -118,7 +124,7 @@ df_time_reason %>%
   summarise(n=n()) %>%
   ungroup() %>%
   ggplot(aes(x=fct_relevel(factor(TrafficControlDevice), "N", after=Inf), y=n)) + 
-  geom_col()+ 
+  geom_col(fill="#8da675")+ 
   facet_wrap(~time_hour, nrow=4, ncol=6)+ 
   labs(x="", y="", title="Traffic Control Device vs Time")
 
@@ -128,7 +134,7 @@ df_time_reason %>%
   summarise(n=n()) %>%
   ungroup() %>%
   ggplot(aes(x=factor(CrashDescriptor), y=n)) + 
-  geom_col()+ 
+  geom_col(fill="#8da675")+ 
   facet_wrap(~time_hour, nrow=4, ncol=6)+ 
   labs(x="", y="", title="Crash Descriptor vs Time")
 
@@ -139,7 +145,7 @@ df_time_reason %>%
   summarise(n=n()) %>%
   ungroup() %>%
   ggplot(aes(x=factor(Collision_Detail), y=n)) + 
-  geom_col()+ 
+  geom_col(fill="#8da675")+ 
   facet_wrap(~time_hour, nrow=4, ncol=6)+ 
   labs(x="", y="", title="Collision Details vs Time")
 
@@ -148,7 +154,7 @@ df_time_reason %>%
   summarise(n=n()) %>%
   ungroup() %>%
   ggplot(aes(x=factor(CollisionTypeDescriptor), y=n)) + 
-  geom_col()+ 
+  geom_col(fill="#8da675")+ 
   facet_wrap(~time_hour, nrow=4, ncol=6)+ 
   labs(x="", y="", title="Collision Type vs Time")
 ```
