@@ -4,7 +4,7 @@
 library(readr)
 df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
+# df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```
 
 ## When
@@ -32,135 +32,125 @@ ggplot(df_time, aes(hour,n, fill=factor(Year))) +
 ```{r fig.height=15, fig.width=20}
 df_time_reason<- df %>% 
   mutate(time_hour = hour(Time)) %>%
- #  filter(time_hour==0 | time_hour==8 | time_hour==17) %>% 
   mutate(time_hour = factor(time_hour), 
-         `Lighting Conditions` = ifelse(str_detect(`Lighting Conditions`, "Dark-Road"), 
+         Lighting = ifelse(str_detect(`Lighting Conditions`, "Dark-Road"), 
                                         sub("^\\S+\\s+","", `Lighting Conditions`), as.character(`Lighting Conditions`)), 
-          `Road Descriptor`= abbreviate(`Road Descriptor`, 1, named = FALSE), 
-         `Traffic Control Device`= abbreviate(`Traffic Control Device`, 1, named = FALSE)) %>%
-  select(time_hour, `Crash Descriptor`, `Lighting Conditions`, `Road Descriptor`, `Traffic Control Device`, Collision_Detail, `Collision Type Descriptor`)
+          RoadDescriptor = abbreviate(`Road Descriptor`, 1, named = FALSE), 
+         TrafficControlDevice = abbreviate(`Traffic Control Device`, 1, named = FALSE), 
+         CrashDescriptor = abbreviate(`Crash Descriptor`, 1, named=FALSE), 
+         CollisionTypeDescriptor = `Collision Type Descriptor`) %>%
+  select(time_hour, CrashDescriptor, Lighting, RoadDescriptor, TrafficControlDevice, Collision_Detail, CollisionTypeDescriptor)
 
-pairs(table(df_time_reason), highlighting=2)
+# pairs(table(df_time_reason), highlighting=2)
+```
+
+```{r fig.height=20, fig.width=25}
+t1 <-  df_time_reason %>%
+  select(time_hour,Lighting) %>%
+  group_by(time_hour, Lighting) %>%
+  summarise(Freq=n()) %>%
+  ungroup()
+
+t2 <- df_time_reason %>%
+  select(time_hour,RoadDescriptor) %>%
+  group_by(time_hour, RoadDescriptor) %>%
+  summarise(Freq=n()) %>%
+  ungroup()
+
+t3 <- df_time_reason %>%
+  select(time_hour,TrafficControlDevice) %>%
+  group_by(time_hour, TrafficControlDevice) %>%
+  summarise(Freq=n()) %>%
+  ungroup()
+
+t4 <- df_time_reason %>%
+  select(time_hour,CrashDescriptor) %>%
+  group_by(time_hour, CrashDescriptor) %>%
+  summarise(Freq=n()) %>%
+  ungroup()
+
+t5 <- df_time_reason %>%
+  select(time_hour,Collision_Detail) %>%
+  group_by(time_hour, Collision_Detail) %>%
+  summarise(Freq=n()) %>%
+  ungroup()
+
+t6 <- df_time_reason %>%
+  select(time_hour,CollisionTypeDescriptor) %>%
+  group_by(time_hour, CollisionTypeDescriptor) %>%
+  summarise(Freq=n()) %>%
+  ungroup()
+
+mosaic(Lighting~time_hour, direction=c("v", "h"), t1)
+mosaic(RoadDescriptor~time_hour, direction=c("v", "h"), t2)
+mosaic(TrafficControlDevice~time_hour, direction=c("v", "h"), t3)
+mosaic(CrashDescriptor~time_hour, direction=c("v", "h"), t4)
+mosaic(Collision_Detail~time_hour, direction=c("v", "h"), t5)
+mosaic(CollisionTypeDescriptor~time_hour, direction=c("v", "h"), t6)
 ```
 
 
+
+
+
 ```{r fig.width=10, message=FALSE, warning=FALSE, echo=FALSE}
-p1<- df_time_reason %>% 
-  filter(time_hour==0) %>%
-  group_by(time_hour, `Lighting Conditions`) %>%
+df_time_reason %>% 
+  group_by(time_hour, Lighting) %>%
   summarise(n=n()) %>%
   ungroup() %>%
-  ggplot(aes(x=fct_relevel(factor(`Lighting Conditions`), "Unknown", after=Inf), y=n)) + 
+  ggplot(aes(x=fct_relevel(factor(Lighting), "Unknown", after=Inf), y=n)) + 
   geom_col()+ 
-  labs(x="", y="") + ylim(0, 50000)
-  
-p2<- df_time_reason %>%
-filter(time_hour==8) %>%
-group_by(time_hour, `Lighting Conditions`) %>%
-summarise(n=n()) %>%
-ungroup() %>%
-ggplot(aes(x=fct_relevel(factor(`Lighting Conditions`), "Unknown", after=Inf), y=n)) +
-geom_col()+ 
-  labs(x="", y="")  + ylim(0, 50000)
+  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
+  labs(x="", y="", title="Lighting Condition vs Time") + theme_bw()
 
-p3 <- df_time_reason %>%
-filter(time_hour==17) %>%
-group_by(time_hour, `Lighting Conditions`) %>%
-summarise(n=n()) %>%
-  ungroup() %>%
-ggplot(aes(x=fct_relevel(factor(`Lighting Conditions`), "Unknown", after=Inf), y=n)) +
-geom_col()+ 
-  labs(x="", y="") + ylim(0, 50000)
-
-
-p4<- df_time_reason %>% 
-  filter(time_hour==0) %>%
-  group_by(time_hour, `Road Descriptor`) %>%
+df_time_reason %>% 
+  group_by(time_hour, RoadDescriptor) %>%
   summarise(n=n()) %>%
   ungroup() %>%
-  ggplot(aes(x=factor(`Road Descriptor`), y=n)) + 
+  ggplot(aes(x=fct_relevel(factor(RoadDescriptor), "U", after=Inf), y=n)) + 
   geom_col()+ 
-  labs(x="", y="")+ ylim(0, 58000)
+  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
+  labs(x="", y="", title="Road Descriptor vs Time")
   
-p5<- df_time_reason %>%
-filter(time_hour==8) %>%
-group_by(time_hour, `Road Descriptor`) %>%
-summarise(n=n()) %>%
-ungroup() %>%
-ggplot(aes(x=factor(`Road Descriptor`), y=n)) +
-geom_col()+ 
-  labs(x="", y="")+ ylim(0, 58000)
 
-p6 <- df_time_reason %>%
-filter(time_hour==17) %>%
-group_by(time_hour, `Road Descriptor`) %>%
-summarise(n=n()) %>%
-  ungroup() %>%
-ggplot(aes(x=factor(`Road Descriptor`), y=n)) +
-geom_col()+ 
-  labs(x="", y="") + ylim(0, 58000)
-
-wrap_plots(p1, p2, p3, p4, p5, p6)
-```
-```{r fig.width=10, message=FALSE, warning=FALSE, echo=FALSE}
-p7<- df_time_reason %>% 
-  filter(time_hour==0, `Traffic Control Device` != "N") %>%
-  group_by(time_hour, `Traffic Control Device`) %>%
+df_time_reason %>% 
+  group_by(time_hour, TrafficControlDevice) %>%
   summarise(n=n()) %>%
   ungroup() %>%
-  ggplot(aes(x=factor(`Traffic Control Device`), y=n)) + 
+  ggplot(aes(x=fct_relevel(factor(TrafficControlDevice), "N", after=Inf), y=n)) + 
   geom_col()+ 
-  labs(x="", y="")+ ylim(0, 20000)
-  
-p8<- df_time_reason %>%
-filter(time_hour==8, `Traffic Control Device` != "N") %>%
-group_by(time_hour, `Traffic Control Device`) %>%
-summarise(n=n()) %>%
-ungroup() %>%
-ggplot(aes(x=factor(`Traffic Control Device`), y=n)) +
-geom_col()+ 
-  labs(x="", y="")+ ylim(0, 20000)
+  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
+  labs(x="", y="", title="Traffic Control Device vs Time")
 
-p9 <- df_time_reason %>%
-filter(time_hour==17, `Traffic Control Device` != "N") %>%
-group_by(time_hour, `Traffic Control Device`) %>%
-summarise(n=n()) %>%
-  ungroup() %>%
-ggplot(aes(x=factor(`Traffic Control Device`), y=n)) +
-geom_col()+ 
-  labs(x="", y="") + ylim(0, 20000)
 
-wrap_plots(p7, p8, p9)
-```
-```{r fig.width=10, message=FALSE, warning=FALSE, echo=FALSE}
-p10<- df_time_reason %>% 
-  filter(time_hour==0) %>%
-  group_by(time_hour, `Collision Type Descriptor`) %>%
+df_time_reason %>% 
+  group_by(time_hour, CrashDescriptor) %>%
   summarise(n=n()) %>%
   ungroup() %>%
-  ggplot(aes(x=factor(`Collision Type Descriptor`), y=n)) + 
+  ggplot(aes(x=factor(CrashDescriptor), y=n)) + 
   geom_col()+ 
-  labs(x="", y="")+ ylim(0, 25000)
-  
-p11<- df_time_reason %>%
-filter(time_hour==8) %>%
-group_by(time_hour, `Collision Type Descriptor`) %>%
-summarise(n=n()) %>%
-ungroup() %>%
-ggplot(aes(x=factor(`Collision Type Descriptor`), y=n)) +
-geom_col()+ 
-  labs(x="", y="")+ ylim(0, 25000)
+  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
+  labs(x="", y="", title="Crash Descriptor vs Time")
 
-p12<- df_time_reason %>%
-filter(time_hour==17) %>%
-group_by(time_hour, `Collision Type Descriptor`) %>%
-summarise(n=n()) %>%
+
+df_time_reason %>% 
+  filter(Collision_Detail != "Other Motor Vehicle")%>%
+  group_by(time_hour, Collision_Detail) %>%
+  summarise(n=n()) %>%
   ungroup() %>%
-ggplot(aes(x=factor(`Collision Type Descriptor`), y=n)) +
-geom_col()+ 
-  labs(x="", y="") + ylim(0, 25000)
+  ggplot(aes(x=factor(Collision_Detail), y=n)) + 
+  geom_col()+ 
+  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
+  labs(x="", y="", title="Collision Details vs Time")
 
-wrap_plots(p10, p11, p12)
+df_time_reason %>% 
+  group_by(time_hour, CollisionTypeDescriptor) %>%
+  summarise(n=n()) %>%
+  ungroup() %>%
+  ggplot(aes(x=factor(CollisionTypeDescriptor), y=n)) + 
+  geom_col()+ 
+  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
+  labs(x="", y="", title="Collision Type vs Time")
 ```
 
 ### Day of Week
@@ -193,7 +183,7 @@ ggplot(aes(factor(Month),n)) +
 
 
 ## Where
-```{r echo=FALSE, fig.height=10, fig.width=20, message=FALSE, warning=FALSE}
+```{r echo=FALSE, fig.height=20, fig.width=30, message=FALSE, warning=FALSE}
 ny_county <- subset(map_data("county"), region == "new york") 
   
 df_county <- right_join(df %>% 
