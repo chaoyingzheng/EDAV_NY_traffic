@@ -1,29 +1,39 @@
-# Data sources
+# Data
 
-### Data Description
+## Data Sources
 
+Data: Motor Vehicle Crashes - Case Information: Three Year Window  
 Source: https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe
 
-The data set we used are coming from the New York State government data website
-(www.data.ny.gov), specifically provided by the NYS Department of Motor Vehicles. The data set was collected by the Crash Records Center, contains statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.  
+The dataset we used are coming from the New York State government data website
+(www.data.ny.gov), specifically provided by the NYS Department of Motor Vehicles(DMV). Note that all crash reports processed by law enforcement personnel are forwarded to the NYS DMV for processing. The NYS Vehicle and Traffic Law require that the parties involved in any crash where injury or death occurred, or property damage in excess of $1,000 results, file a motorist crash report with the DMV. Hence, this data contains that received from both the law enforcement and motorist crash reports filed with DMV.  
 
-### Columns Description
-The raw data set contains of 881,617 observations with 18 variables, including the following
-"Year": 
-"Crash Descriptor": 
-"Time": 
-"Date": 
-"Day of Week": 
-"Police Report"
-"Lighting Conditions"
-"Municipality"
-"Collision Type Descriptor"
-"County Name"
-"Road Descriptor"
-"Weather Conditions"
-"Traffic Control Device"
-"Road Surface Conditions"
-"DOT Reference Marker Location"
-"Pedestrian Bicyclist Action"
-"Event Descriptor"
-"Number of Vehicles Involved"
+In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.  
+
+
+## Columns Description
+The raw vehicle crashes data set contains of 881,617 observations with 18 variables, including the following:  
+
+**Year**: Calendar year of incident. A 4-digits number, which is either "2018" or "2019" for the given time period.  
+**Crash Descriptor**: Categorical variable, it is the reported injury or damage outcome of crash. Including "Property Damage & Injury Accident", "Fatal Accident", "Injury Accident" and "Property Damage Accident".  
+**Time**: The specific time during the day of the car crashes, in the 24-hours format.  
+**Date**: The specific date for when car crashes occured, in the format of "MM/DD/YYYY".  
+**Day of Week**: Categorical variable, "Monday", "Tuesday", "Wednesday"...   
+**Police Report**: Categorical variable, "Y" or "N", indicating whether police crash report is on file.  
+**Lighting Conditions**: Categorical variable for the lighting conditions at time of crash.    
+**Municipality**: Categorical variable that shows the municipality of crash location.   
+**Collision Type Descriptor**: Categorical variable that shows the collision manner type.  
+**County Name**: Specific county in New York State where the crash occurred.  
+**Road Descriptor**: Road description where the crash occurred, categorical.  
+**Weather Conditions**: Categorical variable of reported weather conditions when the crash  occurred, including "snow", "rain", "cloudy"...  
+**Traffic Control Device**: Reported traffic control device present where the crash occurred, such as "Traffic Signal" and "Stop Sign".   
+**Road Surface Conditions**: Categorical variable of report road surface conditions when the crash occurred, for example "Dry", "Snow/Ice", "Wet"...  
+**DOT Reference Marker Location**: Department of Transportation reference marker present at location of crash.  
+**Pedestrian Bicyclist Action**: Categorical variable of the Pedestrian Bicyclist Action at the time of the crash, if applicable.  
+**Event Descriptor**: String variable of the reported description of the crash event.
+**Number of Vehicles Involved**: Numeric variable of the number of vehicles involved in the crash.  
+
+
+##Issues With the Dataset
+With description for all 18 variables above, we can see that the data provides plenty of information regarding each case of crashes. However, according to the description of the variables, not all variables will be useful base on the problem statement and our study goals. We will have to drop some irrelevant variables before proceeding to the analysis. 
+
