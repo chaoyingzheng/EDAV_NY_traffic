@@ -8,11 +8,12 @@ site: bookdown::bookdown_site
 # Introduction
 
 
-### Background
+## Background
 According to the National Safety Council, the number of motor-vehicle deaths (which include all types of motor vehicles) in the United States increased 831% within about 100 years, from 4200 deaths in 1913 to 39107 in 2019. Up to 2019, the population motor-vehicle death rate in the United States was 11.9 per 100,000 population. Indeed, road crashes are the leading cause of death in the U.S. for people aged between 1 and 54.  
 Instead of the whole country, we will focus on studying the traffic accidents happened in New York State specifically, considered that motor vehicle traffic injuries are not only the leading cause of injury related death, but also the second leading cause of injury related hospitalizations and third leading cause for injury related emergency department visits in New York State. Stated by the NY State government, on average, three New Yorkers die every day due to traffic-related cars. While none of us can completely protect ourselves against the odds of being in an auto accident, simple awareness of the danger can help us all remain safer on the roads. Through exploratory data analysis and visualization, we will try figuring out the answers the problems related to traffic accidents that are stated in the following section. We believe the answers to problems could help people building up their awareness, leading to decline in motor vehicle crashes.  
 
-### Problem Statement
+
+## Problem Statement
 
 1. Where and When car crashes happen the most in New York? Which month in a year, which day in a week, etc. For example, is there a day in the week that a motor vehicle crash is more likely to happen? 
 2. What are the most frequent events (reasons) of motor vehicle crashes? What are the common patterns of the road, light and weather conditions? Will the proportion of different types of crashes vary by year? 
