@@ -30,134 +30,127 @@ ggplot(df_time, aes(hour,n, fill=factor(Year))) +
   scale_fill_brewer(palette="Set2") +
   theme_minimal()
 ```
-Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that `Lighting Conditions`, `Road Descriptor`, `Traffic Control Device`, `Crash Descriptor` and `Collision Type Descriptor` are highly correlated with the hour in a day. The following histograms will examine this assumption. Also we will use `Collision_Detail` to see what the actual reasons for crashing in each hour. 
+Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that `Lighting Conditions`, `Road Descriptor`, `Traffic Control Device`, `Crash Descriptor` and `Collision Type Descriptor` are highly correlated with the hour in a day. The following mosaic plots and histograms will examine each variable independent with time. Also `Collision_Detail` will be used to see what the actual reasons for crashing in each hour. 
 
-```{r fig.height=15, fig.width=20}
-
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 # Extract Columns for Time Analysis and Data Cleaning 
 df_time_reason<- df %>% 
   mutate(time_hour = hour(Time)) %>%
-  mutate(time_hour = factor(time_hour), 
+  mutate(`Time` = factor(paste(as.character(time_hour), ":00", sep="")), 
          Lighting = ifelse(str_detect(`Lighting Conditions`, "Dark-Road"), 
                                         sub("^\\S+\\s+","", `Lighting Conditions`), as.character(`Lighting Conditions`)), 
           RoadDescriptor = abbreviate(`Road Descriptor`, 1, named = FALSE), 
-         TrafficControlDevice = abbreviate(`Traffic Control Device`, 1, named = FALSE), 
          CrashDescriptor = abbreviate(`Crash Descriptor`, 1, named=FALSE), 
          CollisionTypeDescriptor = `Collision Type Descriptor`) %>%
-  select(time_hour, CrashDescriptor, Lighting, RoadDescriptor, TrafficControlDevice, Collision_Detail, CollisionTypeDescriptor)
+  select(`Time`, time_hour, CrashDescriptor, Lighting, RoadDescriptor,  `Traffic Control Device`, Collision_Detail, Collision_Type, CollisionTypeDescriptor)
 
-# pairs(table(df_time_reason), highlighting=2)
-```
-
-```{r fig.height=20, fig.width=25}
+# dataframe for mosaic plots
 t1 <-  df_time_reason %>%
   select(time_hour,Lighting) %>%
-  group_by(time_hour, Lighting) %>%
+  mutate(Time = time_hour) %>%
+  group_by(Time, Lighting) %>%
   summarise(Freq=n()) %>%
   ungroup()
-
+t1$Lighting <- fct_relevel(t1$Lighting,"Unknown", after=Inf)
+  
 t2 <- df_time_reason %>%
   select(time_hour,RoadDescriptor) %>%
-  group_by(time_hour, RoadDescriptor) %>%
+  mutate(Time = time_hour) %>%
+  group_by(Time, RoadDescriptor) %>%
   summarise(Freq=n()) %>%
   ungroup()
-
-t3 <- df_time_reason %>%
-  select(time_hour,TrafficControlDevice) %>%
-  group_by(time_hour, TrafficControlDevice) %>%
-  summarise(Freq=n()) %>%
-  ungroup()
+t2$RoadDescriptor <- fct_recode(t2$RoadDescriptor, CG="CaG", CH="CaHC", CL="CaL", SH="SaHC", SG="SaG", SL="SaL", U="U")
 
 t4 <- df_time_reason %>%
   select(time_hour,CrashDescriptor) %>%
-  group_by(time_hour, CrashDescriptor) %>%
-  summarise(Freq=n()) %>%
-  ungroup()
-
-t5 <- df_time_reason %>%
-  select(time_hour,Collision_Detail) %>%
-  group_by(time_hour, Collision_Detail) %>%
+  mutate(Time = time_hour) %>%
+  group_by(Time, CrashDescriptor) %>%
   summarise(Freq=n()) %>%
   ungroup()
 
 t6 <- df_time_reason %>%
   select(time_hour,CollisionTypeDescriptor) %>%
-  group_by(time_hour, CollisionTypeDescriptor) %>%
+  mutate(Time = time_hour) %>%
+  group_by(Time, CollisionTypeDescriptor) %>%
   summarise(Freq=n()) %>%
   ungroup()
+t6$CollisionTypeDescriptor <- fct_recode(t6$CollisionTypeDescriptor, H="HEAD ON", `0`="LEFT TURN (0)", `3`="LEFT TURN (3)", 
+                                         O="OTHER", OT="OVERTAKING", RE="REAR END", RA="RIGHT ANGLE", `5`="RIGHT TURN (5)", 
+                                         `6`="RIGHT TURN (6)", S="SIDESWIPE", U="Unknown")
+```
 
-mosaic(Lighting~time_hour, direction=c("v", "h"), t1)
-mosaic(RoadDescriptor~time_hour, direction=c("v", "h"), t2)
-mosaic(TrafficControlDevice~time_hour, direction=c("v", "h"), t3)
-mosaic(CrashDescriptor~time_hour, direction=c("v", "h"), t4)
-mosaic(Collision_Detail~time_hour, direction=c("v", "h"), t5)
-mosaic(CollisionTypeDescriptor~time_hour, direction=c("v", "h"), t6)
+**Lighting Condition**
+```{r fig.width=15, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+mosaic(Lighting~Time, direction=c("v", "h"), t1)
+```
+
+**Road Surface Condition**
+```{r fig.width=15, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+mosaic(RoadDescriptor~Time, direction=c("v", "h"), t2)
+```
+
+**Demage Severity **
+```{r fig.width=15,fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+mosaic(CrashDescriptor~Time, direction=c("v", "h"), t4)
+```
+**Collision Type Description**
+
+```{r fig.width=15, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+mosaic(CollisionTypeDescriptor~Time, direction=c("v", "h"), t6)
 ```
 
 
+**Traffic Control Condition**
+```{r fig.width=10, fig.height=10, echo=FALSE}
+h1 <- df_time_reason %>% 
+  group_by(time_hour, `Traffic Control Device`) %>% summarise(n=n()) %>%
+  top_n(6) %>% ungroup()
 
-Todo: analysis, add each col's level in the description/analysis, conclude whether correlated with time
-Todo (code): x-axis label clean up(rotation or abbreviate), add full name if abbreviate
+h1$`Traffic Control Device` <- h1$`Traffic Control Device` %>%
+  fct_relevel("None") %>% 
+  fct_recode(NP="No Passing Zone", None="None", Other="Other", Stop="Stop Sign", Signal="Traffic Signal", Y="Yield Sign", U="Unknown")
 
-```{r fig.width=10, message=FALSE, warning=FALSE, echo=FALSE}
-df_time_reason %>% 
-  group_by(time_hour, Lighting) %>%
-  summarise(n=n()) %>%
-  ungroup() %>%
-  ggplot(aes(x=fct_relevel(factor(Lighting), "Unknown", after=Inf), y=n)) + 
-  geom_col(fill="#8da675")+ 
-  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
-  labs(x="", y="", title="Lighting Condition vs Time") + theme_bw()
-
-df_time_reason %>% 
-  group_by(time_hour, RoadDescriptor) %>%
-  summarise(n=n()) %>%
-  ungroup() %>%
-  ggplot(aes(x=fct_relevel(factor(RoadDescriptor), "U", after=Inf), y=n)) + 
-  geom_col(fill="#8da675")+ 
-  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
-  labs(x="", y="", title="Road Descriptor vs Time")
-  
-
-df_time_reason %>% 
-  group_by(time_hour, TrafficControlDevice) %>%
-  summarise(n=n()) %>%
-  ungroup() %>%
-  ggplot(aes(x=fct_relevel(factor(TrafficControlDevice), "N", after=Inf), y=n)) + 
-  geom_col(fill="#8da675")+ 
-  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
-  labs(x="", y="", title="Traffic Control Device vs Time")
+ggplot(h1, aes(x=`Traffic Control Device`, y=n)) + geom_col() + facet_wrap(~time_hour, nrow=6, ncol=4)
+```
 
 
-df_time_reason %>% 
-  group_by(time_hour, CrashDescriptor) %>%
-  summarise(n=n()) %>%
-  ungroup() %>%
-  ggplot(aes(x=factor(CrashDescriptor), y=n)) + 
-  geom_col(fill="#8da675")+ 
-  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
-  labs(x="", y="", title="Crash Descriptor vs Time")
-
-
-df_time_reason %>% 
-  filter(Collision_Detail != "Other Motor Vehicle")%>%
+**Collision Details**
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+h2 <- df_time_reason %>% 
+  filter(Collision_Type != "Collision With" ) %>%
   group_by(time_hour, Collision_Detail) %>%
   summarise(n=n()) %>%
-  ungroup() %>%
-  ggplot(aes(x=factor(Collision_Detail), y=n)) + 
-  geom_col(fill="#8da675")+ 
-  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
-  labs(x="", y="", title="Collision Details vs Time")
+  top_n(5) %>%
+  ungroup()
 
-df_time_reason %>% 
-  group_by(time_hour, CollisionTypeDescriptor) %>%
-  summarise(n=n()) %>%
-  ungroup() %>%
-  ggplot(aes(x=factor(CollisionTypeDescriptor), y=n)) + 
-  geom_col(fill="#8da675")+ 
-  facet_wrap(~time_hour, nrow=4, ncol=6)+ 
-  labs(x="", y="", title="Collision Type vs Time")
+h2$Collision_Detail <- h2$Collision_Detail %>% fct_recode(E="Earth Embankment/Rock Cut/Ditch", G="Guide Rail - Not At End", Tree="Tree",
+                                                          U="Light Support/Utility Pole", Other="Other Fixed Object*", Sign="Sign Post") %>%
+  fct_relevel("Other", "Sign", after=Inf)
+
+ggplot(h2, aes(x=factor(Collision_Detail), y=n)) + 
+geom_col(fill="#8da675")+ 
+facet_wrap(~time_hour, nrow=6, ncol=4)+ 
+labs(x="", y="", title="Collision Details vs Time")
 ```
+
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+h3 <- df_time_reason %>% 
+  filter(Collision_Type == "Collision With" ) %>% #, Collision_Detail != "Other Motor Vehicle")%>%
+  group_by(time_hour, Collision_Detail) %>%
+  summarise(n=n()) %>%
+  ungroup()
+
+h3$Collision_Detail <- h3$Collision_Detail %>% fct_recode(Ani="Animal", Bike="Bicyclist", S="In-Line Skater", Vehicle="Other Motor Vehicle",
+                                  O="Other Object (Not Fixed)*", P="Pedestrian", Train="Railroad Train") %>%
+  fct_relevel('Vehicle', 'Ani','P')
+
+ggplot(h3, aes(x=factor(Collision_Detail), y=n)) + 
+geom_col(fill="#8da675")+ 
+facet_wrap(~time_hour, nrow=6, ncol=4)+ 
+labs(x="", y="", title="Collision Details vs Time")
+```
+
 
 ### Day of Week
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}

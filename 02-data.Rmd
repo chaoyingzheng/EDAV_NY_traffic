@@ -30,10 +30,10 @@ The raw vehicle crashes data set contains of 881,617 observations with 18 variab
 **Road Surface Conditions**: Categorical variable of report road surface conditions when the crash occurred, for example "Dry", "Snow/Ice", "Wet"...  
 **DOT Reference Marker Location**: Department of Transportation reference marker present at location of crash.  
 **Pedestrian Bicyclist Action**: Categorical variable of the Pedestrian Bicyclist Action at the time of the crash, if applicable.  
-**Event Descriptor**: String variable of the reported description of the crash event.
+**Event Descriptor**: String variable of the reported description of the crash event.   
 **Number of Vehicles Involved**: Numeric variable of the number of vehicles involved in the crash.  
 
 
-##Issues With the Dataset
+## Issues With the Dataset
 With description for all 18 variables above, we can see that the data provides plenty of information regarding each case of crashes. However, according to the description of the variables, not all variables will be useful base on the problem statement and our study goals. We will have to drop some irrelevant variables before proceeding to the analysis. 
 

@@ -20,3 +20,11 @@ month-of-year
 where
 interactive-component
 conclusion
+data
+lighting-condition
+road-surface-condition
+demage-severity
+collision-type-description
+traffic-control-condition
+collision-details
+issues-with-the-dataset
