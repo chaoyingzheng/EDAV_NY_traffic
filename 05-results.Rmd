@@ -4,7 +4,9 @@
 library(readr)
 df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-# df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
+#df <- read.csv("~/Downloads/cash_information_clean.csv")
+
+#df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```
 
 ## When
@@ -14,6 +16,7 @@ library(dplyr)
 library(lubridate)
 library(vcd)
 library(patchwork)
+library(RColorBrewer)
 ```
 
 ### Time in Day
@@ -182,9 +185,37 @@ df %>% select(Date) %>%
   summarize(n = n()) %>%
 
 ggplot(aes(factor(Month),n)) + 
-  geom_col(fill="#2470b9") +
-  labs(x="Month", y="Frequency") +
-  theme_minimal()
+  geom_col(fill="#35978F", alpha = 0.9) +
+  labs(x="Month", y="Frequency") + 
+  ggtitle("Car Crashes Occurred Each Month during 2018-2019") + 
+  theme_minimal() 
+```
+    The bar plots above shows the number of car crashes occurred on each month accumulating 2018 and 2019. While the differences between each month are not tremendous, we could still observe that the number of crashes that happened in October, November, December and January are higher than the other months in a year. 
+    Remarkably, the four months that have highest number of car crashes occurred are cluster together, and these four months covers almost the whole winter season. Considering the season factor, the weather conditions are different in winter than other season, and the daytime are shorter in winter which the lighting condition could be different as well. 
+
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+
+df_month <- df %>% 
+  mutate(Month = month(Date))
+
+df_light <- df_month %>%
+  select(Month, Lighting.Conditions) %>%
+  group_by(Month, Lighting.Conditions) %>%
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
+  ungroup()
+
+fillcolors <- brewer.pal(6, "Blues")
+df_light$Lighting.Conditions <- factor(df_light$Lighting.Conditions, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
+ggplot(df_light, aes(x = factor(Month), y = RelFreq, fill = Lighting.Conditions)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Lighting Conditions of Car Crashes") + 
+  labs(x = "Month", y = "Proportion") + 
+  theme_classic()
+
+#mosaic(Lighting.Conditions ~ Month, direction=c("v", "h"), highlighting_fill = c("#F7FBFF", "#C6DBEF", "#6BAED6", "#4292C6", "#2171B5", "#084594"), df_light)
+
 ```
 
 
@@ -229,5 +260,85 @@ ggplot(data=df_county, aes(x=long, y=lat)) +
   scale_fill_gradient(low="white", high="darkgreen") +
   theme(panel.background = element_blank(), plot.title = element_text(hjust = 0.5)) +
   inset_element(embed_plot,0.01, 0.01, 0.35, 0.35)
+```
+
+
+## How
+
+**Top 10 Crahes Detail**
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+
+df_detail <- df %>% 
+  group_by(Collision_Detail) %>%
+  summarize(n = n()) %>%
+  slice_max(order_by = n, n = 10)
+
+ggplot(df_detail, aes(x = fct_reorder(Collision_Detail, n, .desc = TRUE), y=n)) + 
+  geom_col(fill="Purple", alpha = 0.9) +
+  labs(x="Crash Detail", y="Frequency") + 
+  ggtitle("Top 10 Car Crashes Deatails") + 
+  theme_minimal()
+
+```
+
+
+**Road Surface patterns correspond to these top 10 type of Crashes**
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+
+tenMost <- list(df_detail$Collision_Detail)
+
+df_collision <- df_month %>%
+  filter(Collision_Detail %in% df_detail$Collision_Detail) %>%
+  select(Collision_Detail, Road.Surface.Conditions) %>%
+  group_by(Collision_Detail, Road.Surface.Conditions) %>%
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
+  ungroup()
+
+fillcolors <- brewer.pal(8, "Blues")
+ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .desc = FALSE), fill = Road.Surface.Conditions)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  labs(x = "Proportion", y = "Collision Detail") +
+  ggtitle("Road Surface Condition of the Corresponding Type of Crashes") + 
+  theme_classic()
+
+```
+
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+
+df_RoSur <- df %>% 
+  group_by(Road.Surface.Conditions) %>%
+  summarize(n = n())
+
+ggplot(df_RoSur, aes(x = fct_reorder(Road.Surface.Conditions, n, .desc = TRUE), y=n)) + 
+  geom_col(fill="DarkBlue", alpha = 0.9) +
+  labs(x="Road Surface Conditions", y="Frequency") + 
+  ggtitle("Road Surface Conditions When Car Crashes Occurred") + 
+  theme_minimal()
+
+```
+
+
+
+**Combination: Lighting Conditions and Road Surface Condition**
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+
+df_light <- df %>%
+  select(Road.Surface.Conditions, Lighting.Conditions) %>%
+  group_by(Road.Surface.Conditions, Lighting.Conditions) %>%
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
+  ungroup()
+
+fillcolors <- brewer.pal(8, "Blues")
+df_light$Lighting.Conditions <- factor(df_light$Lighting.Conditions, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
+ggplot(df_light, aes(x = Road.Surface.Conditions, y = RelFreq, fill = Lighting.Conditions)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Lighting and Road Surface Conditions of Car Crashes") + 
+  labs(x = "Road Surface Condition", y = "Proportion") + 
+  theme_classic()
+
 ```
 
