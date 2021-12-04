@@ -24,7 +24,7 @@
 <meta name="author" content="Chaoying Zheng, Haoyang Shen" />
 
 
-<meta name="date" content="2021-12-02" />
+<meta name="date" content="2021-12-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -75,13 +75,14 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#background"><i class="fa fa-check"></i><b>1.0.1</b> Background</a></li>
-<li class="chapter" data-level="1.0.2" data-path="index.html"><a href="index.html#problem-statement"><i class="fa fa-check"></i><b>1.0.2</b> Problem Statement</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background"><i class="fa fa-check"></i><b>1.1</b> Background</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#problem-statement"><i class="fa fa-check"></i><b>1.2</b> Problem Statement</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data</a>
 <ul>
-<li class="chapter" data-level="2.0.1" data-path="data-sources.html"><a href="data-sources.html#data-description"><i class="fa fa-check"></i><b>2.0.1</b> Data Description</a></li>
-<li class="chapter" data-level="2.0.2" data-path="data-sources.html"><a href="data-sources.html#columns-description"><i class="fa fa-check"></i><b>2.0.2</b> Columns Description</a></li>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#data-sources"><i class="fa fa-check"></i><b>2.1</b> Data Sources</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#columns-description"><i class="fa fa-check"></i><b>2.2</b> Columns Description</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#issues-with-the-dataset"><i class="fa fa-check"></i><b>2.3</b> Issues With the Dataset</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
@@ -133,25 +134,34 @@
 <div id="time-in-day" class="section level3" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> Time in Day</h3>
 <p>First, we explore when crashes happen the most, and the corresponding reasons. (Todo: x-axis label update to 0:00?)
-<img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="768" />
-Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that <code>Lighting Conditions</code>, <code>Road Descriptor</code>, <code>Traffic Control Device</code>, <code>Crash Descriptor</code> and <code>Collision Type Descriptor</code> are highly correlated with the hour in a day. The following histograms will examine this assumption. Also we will use <code>Collision_Detail</code> to see what the actual reasons for crashing in each hour.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="2400" /><img src="finalproj_files/figure-html/unnamed-chunk-9-2.png" width="2400" /><img src="finalproj_files/figure-html/unnamed-chunk-9-3.png" width="2400" /><img src="finalproj_files/figure-html/unnamed-chunk-9-4.png" width="2400" /><img src="finalproj_files/figure-html/unnamed-chunk-9-5.png" width="2400" /><img src="finalproj_files/figure-html/unnamed-chunk-9-6.png" width="2400" /></p>
-<p>Todo: analysis, add each col’s level in the description/analysis, conclude whether correlated with time
-Todo (code): x-axis label clean up(rotation or abbreviate), add full name if abbreviate</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="960" /><img src="finalproj_files/figure-html/unnamed-chunk-10-2.png" width="960" /><img src="finalproj_files/figure-html/unnamed-chunk-10-3.png" width="960" /><img src="finalproj_files/figure-html/unnamed-chunk-10-4.png" width="960" /><img src="finalproj_files/figure-html/unnamed-chunk-10-5.png" width="960" /><img src="finalproj_files/figure-html/unnamed-chunk-10-6.png" width="960" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-6-1.png" width="768" />
+Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that <code>Lighting Conditions</code>, <code>Road Descriptor</code>, <code>Traffic Control Device</code>, <code>Crash Descriptor</code> and <code>Collision Type Descriptor</code> are highly correlated with the hour in a day. The following mosaic plots and histograms will examine each variable independent with time. Also <code>Collision_Detail</code> will be used to see what the actual reasons for crashing in each hour.</p>
+<p><strong>Lighting Condition</strong>
+<img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="1440" /></p>
+<p><strong>Road Surface Condition</strong>
+<img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="1440" /></p>
+<p><strong>Demage Severity </strong>
+<img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="1440" />
+<strong>Collision Type Description</strong></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="1440" /></p>
+<p><strong>Traffic Control Condition</strong>
+<img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="960" /></p>
+<p><strong>Collision Details</strong>
+<img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="960" /></p>
 </div>
 <div id="day-of-week" class="section level3" number="5.1.2">
 <h3><span class="header-section-number">5.1.2</span> Day of Week</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
 </div>
 <div id="month-of-year" class="section level3" number="5.1.3">
 <h3><span class="header-section-number">5.1.3</span> Month of Year</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
 </div>
 </div>
 <div id="where" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Where</h2>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="2880" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="2880" /></p>
 
 </div>
 </div>
