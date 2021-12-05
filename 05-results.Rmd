@@ -2,9 +2,9 @@
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(readr)
-df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
+#df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-#df <- read.csv("~/Downloads/cash_information_clean.csv")
+df <- read_csv("~/Downloads/cash_information_clean.csv")
 
 #df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```
@@ -388,6 +388,7 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
   theme_classic()
 
 ```
+   Considering that Road surface conditions and lighting conditions are two factor that would affecting a driver, we would look deeper into the crashes detail from the aspect of Road Surface Condition and lighting conditions. 
 
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
