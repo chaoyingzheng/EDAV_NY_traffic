@@ -312,6 +312,22 @@ ggplot(data=df_county, aes(x=long, y=lat)) +
   inset_element(embed_plot,0.01, 0.01, 0.35, 0.35)
 ```
 
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+df_fetal <- df_month %>%
+  filter(`Crash Descriptor` == "Fatal Accident")
+
+df_CF <- df_fetal %>% 
+  group_by(`County Name`) %>%
+  summarize(n = n()) 
+
+ggplot(df_CF, aes(y = fct_reorder(`County Name`, n, .desc = TRUE), x=n)) + 
+  geom_col(fill="Purple", alpha = 0.9) +
+  labs(x="Crash Detail", y="Frequency") + 
+  ggtitle("Top 10 Car Crashes Deatails") + 
+  theme_minimal()
+
+
+```
 
 ## How
 
