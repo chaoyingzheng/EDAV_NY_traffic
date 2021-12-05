@@ -5,10 +5,10 @@
 Data: Motor Vehicle Crashes - Case Information: Three Year Window  
 Source: https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe
 
-The dataset we used are coming from the New York State government data website
+  The dataset we used are coming from the New York State government data website
 (www.data.ny.gov), specifically provided by the NYS Department of Motor Vehicles(DMV). Note that all crash reports processed by law enforcement personnel are forwarded to the NYS DMV for processing. The NYS Vehicle and Traffic Law require that the parties involved in any crash where injury or death occurred, or property damage in excess of $1,000 results, file a motorist crash report with the DMV. Hence, this data contains that received from both the law enforcement and motorist crash reports filed with DMV.  
 
-In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.  
+  In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.  
 
 
 ## Columns Description
@@ -22,7 +22,7 @@ The raw vehicle crashes data set contains of 881,617 observations with 18 variab
 **Police Report**: Categorical variable, "Y" or "N", indicating whether police crash report is on file.  
 **Lighting Conditions**: Categorical variable for the lighting conditions at time of crash.    
 **Municipality**: Categorical variable that shows the municipality of crash location.   
-**Collision Type Descriptor**: Categorical variable that shows the collision manner type.  
+**Collision Type Descriptor**: Categorical variable that shows the collision manner type, such as "Overtaking", "Sideswipe", "Rear End"... 
 **County Name**: Specific county in New York State where the crash occurred.  
 **Road Descriptor**: Road description where the crash occurred, categorical.  
 **Weather Conditions**: Categorical variable of reported weather conditions when the crash  occurred, including "snow", "rain", "cloudy"...  
