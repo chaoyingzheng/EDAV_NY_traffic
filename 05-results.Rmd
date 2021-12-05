@@ -184,7 +184,7 @@ ggplot(aes(factor(Month),n)) +
   theme_minimal() 
 ```
     The bar plots above shows the number of car crashes occurred on each month accumulating 2018 and 2019. While the differences between each month are not tremendous, we could still observe that the number of crashes that happened in October, November, December and January are higher than the other months in a year. 
-    Remarkably, the four months that have highest number of car crashes occurred are cluster together, and these four months covers almost the whole winter season. Considering the season factor, the weather conditions are different in winter than other season, and the daytime are shorter in winter which the lighting condition could be different as well. 
+    Remarkably, the four months that have highest number of car crashes occurred are cluster together, and these four months covers almost the whole winter season. Considering the season factor, the weather conditions are different in winter than other season, and the daytime are shorter in winter which the lighting condition could be different as well. To get further information for car crashes that occurred in these four months, we will visulize through the mosiac plots between months and lighting conditions and weather conditions.
 
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
@@ -210,8 +210,28 @@ ggplot(df_light, aes(x = factor(Month), y = RelFreq, fill = Lighting.Conditions)
 #mosaic(Lighting.Conditions ~ Month, direction=c("v", "h"), highlighting_fill = c("#F7FBFF", "#C6DBEF", "#6BAED6", "#4292C6", "#2171B5", "#084594"), df_light)
 
 ```
+```{r}
 
+df_weather <- df_month %>%
+  select(Month, Weather.Conditions) %>%
+  group_by(Month, Weather.Conditions) %>%
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
+  ungroup()
 
+fillcolors <- brewer.pal(8, "Blues")
+df_weather$Weather.Conditions <- factor(df_weather$Weather.Conditions, levels = c("Unknown", "Other*", "Clear", "Cloudy", "Fog/Smog/Smoke", "Rain", "Sleet/Hail/Freezing Rain", "Snow"))
+ggplot(df_weather, aes(x = factor(Month), y = RelFreq, fill = Weather.Conditions)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Weather Conditions of Car Crashes") + 
+  labs(x = "Month", y = "Proportion") + 
+  theme_classic()
+
+```
+    Looking at the two plots above, for the first plot, we can obverse that for the car crashes that occurred during October, November, December and January, the proportion of having lighting conditions of "Dark-Road Lighted" and "Dark-Road Unlighted" when crashes occurred are higher than those in the other months. While most of the crashes happened under the "Daylight" lighting condition, it is still worth noticing that how the proportion of lighting condition changed when the crashes occurred within these four months.
+    In addition to seeing the lighting conditions, in the second plot showing the proportion of weather conditions when the car crashes occurred, we can observe that around 10 to 18 percent of car crashes occurred in November, December and January are under the "Snow" or "Sleet/Hail/Freezing Rain" weather condition. Since the weather condition vary objective to the time period (season) during a year, we cannot infer weather the higher number of crashes in these four months are due to change in the weather conditions.
+    
 ## Where
 ```{r echo=FALSE, fig.height=20, fig.width=30, message=FALSE, warning=FALSE}
 ny_county <- subset(map_data("county"), region == "new york") 
@@ -273,7 +293,7 @@ ggplot(df_detail, aes(x = fct_reorder(Collision_Detail, n, .desc = TRUE), y=n)) 
   theme_minimal()
 
 ```
-
+    Within the dataset, there is a variable providing the details of each crash case which give us the information of the type of collision. In total, there are 30 different situations. We pick the top 10 types which take over 80 percents of all crashes that occurred for analysis. According to the bar plot above, more than 70 percent of the crashes are collision with other motor vehicle and the following by collision with subject including Animal, Pedestrian, Bicyclist and fix objects such as Tree, Guide Rail and Sign Post.
 
 **Road Surface patterns correspond to these top 10 type of Crashes**
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
