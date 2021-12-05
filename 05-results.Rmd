@@ -20,7 +20,7 @@ library(RColorBrewer)
 ```
 
 ### Time in Day
-First, we explore when crashes happen the most, and the corresponding reasons. (Todo: x-axis label update to 0:00?)
+First, we explore when crashes happen the most, and the corresponding reasons.
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 df_time <- df %>% select(Time, Year) %>%
   mutate(hour = hour(Time)) %>%
@@ -40,10 +40,11 @@ Here is an overview of number of crash occur in 24 hours in 2018 and 2019. First
 df_time_reason<- df %>% 
   mutate(time_hour = hour(Time)) %>%
   mutate(`Time` = factor(paste(as.character(time_hour), ":00", sep="")), 
-         Lighting = ifelse(str_detect(`Lighting Conditions`, "Dark-Road"), 
-                                        sub("^\\S+\\s+","", `Lighting Conditions`), as.character(`Lighting Conditions`)), 
-          RoadDescriptor = abbreviate(`Road Descriptor`, 1, named = FALSE), 
-         CrashDescriptor = abbreviate(`Crash Descriptor`, 1, named=FALSE), 
+         Lighting = `Lighting Conditions`,
+         # ifelse(str_detect(`Lighting Conditions`, "Dark-Road"), 
+         #                                sub("^\\S+\\s+","", `Lighting Conditions`), as.character(`Lighting Conditions`)), 
+          RoadDescriptor = `Road Descriptor`, #abbreviate(`Road Descriptor`, 1, named = FALSE), 
+         CrashDescriptor = `Crash Descriptor`, # abbreviate(`Crash Descriptor`, 1, named=FALSE), 
          CollisionTypeDescriptor = `Collision Type Descriptor`) %>%
   select(`Time`, time_hour, CrashDescriptor, Lighting, RoadDescriptor,  `Traffic Control Device`, Collision_Detail, Collision_Type, CollisionTypeDescriptor)
 
@@ -53,22 +54,26 @@ t1 <-  df_time_reason %>%
   mutate(Time = time_hour) %>%
   group_by(Time, Lighting) %>%
   summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
-t1$Lighting <- fct_relevel(t1$Lighting,"Unknown", after=Inf)
+
+# t1$Lighting <- fct_relevel(t1$Lighting,"Unknown", after=Inf)
   
 t2 <- df_time_reason %>%
   select(time_hour,RoadDescriptor) %>%
   mutate(Time = time_hour) %>%
   group_by(Time, RoadDescriptor) %>%
   summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
-t2$RoadDescriptor <- fct_recode(t2$RoadDescriptor, CG="CaG", CH="CaHC", CL="CaL", SH="SaHC", SG="SaG", SL="SaL", U="U")
+# t2$RoadDescriptor <- fct_recode(t2$RoadDescriptor, CG="CaG", CH="CaHC", CL="CaL", SH="SaHC", SG="SaG", SL="SaL", U="U")
 
 t4 <- df_time_reason %>%
   select(time_hour,CrashDescriptor) %>%
   mutate(Time = time_hour) %>%
   group_by(Time, CrashDescriptor) %>%
   summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
 
 t6 <- df_time_reason %>%
@@ -76,82 +81,146 @@ t6 <- df_time_reason %>%
   mutate(Time = time_hour) %>%
   group_by(Time, CollisionTypeDescriptor) %>%
   summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
-t6$CollisionTypeDescriptor <- fct_recode(t6$CollisionTypeDescriptor, H="HEAD ON", `0`="LEFT TURN (0)", `3`="LEFT TURN (3)", 
-                                         O="OTHER", OT="OVERTAKING", RE="REAR END", RA="RIGHT ANGLE", `5`="RIGHT TURN (5)", 
-                                         `6`="RIGHT TURN (6)", S="SIDESWIPE", U="Unknown")
+
+# t6$CollisionTypeDescriptor <- fct_recode(t6$CollisionTypeDescriptor, H="HEAD ON", `0`="LEFT TURN (0)", `3`="LEFT TURN (3)", 
+#                                          O="OTHER", OT="OVERTAKING", RE="REAR END", RA="RIGHT ANGLE", `5`="RIGHT TURN (5)", 
+#                                          `6`="RIGHT TURN (6)", S="SIDESWIPE", U="Unknown")
 ```
 
 **Lighting Condition**
-```{r fig.width=15, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
-mosaic(Lighting~Time, direction=c("v", "h"), t1)
+The variation for lighting condition matches time. During day time, the majority cases are under daylight; and during evening, majority cases are under Dark-Road Lighted/Unlighted condition. For crashes happened in the night, the proportion of lighted condition are always higher than the proportion of unlighted condition. On the other side, 17:00 is when most crashes happened during one day, which is under daylight condition in most of the time. Therefore, we can simply conclude that the reason of evening crashes is not correlated with the lighting condition. 
+
+(TODO: 17:00 during all months, since during winter it is dark?)
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+fillcolors <- brewer.pal(6, "Set3")
+
+t1$Lighting <- factor(t1$Lighting, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
+
+ggplot(t1, aes(x = factor(Time), y = RelFreq, fill = Lighting)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Lighting Conditions of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
+
+# mosaic(Lighting~Time, direction=c("v", "h"), t1)
 ```
 
-**Road Surface Condition**
-```{r fig.width=15, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
-mosaic(RoadDescriptor~Time, direction=c("v", "h"), t2)
+**Road Descriptor**
+The assumption for road descriptor is that during night curve conditions may have more cases than straight conditions. However, the plot indicates that the road descriptor doesn't have a obvious correlation with time. In one day, most of the cases were under the straight and level condition, which is the major condition of most of the road in the states. 
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+fillcolors <- brewer.pal(7, "Set3")
+
+t2$RoadDescriptor <- fct_relevel(t2$RoadDescriptor,"Unknown")
+
+ggplot(t2, aes(x = factor(Time), y = RelFreq, fill = RoadDescriptor)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Road Descriptor of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
+# mosaic(RoadDescriptor~Time, direction=c("v", "h"), t2)
 ```
 
-**Demage Severity **
-```{r fig.width=15,fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
-mosaic(CrashDescriptor~Time, direction=c("v", "h"), t4)
+**Damage Severity **
+Most of the crash in these two years are property damage accident. Injury accidentm, property damage & injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but always happened during night and early morning. 
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+fillcolors <- brewer.pal(4, "Set3")
+
+t4$CrashDescriptor <- fct_relevel(t4$CrashDescriptor,"Fatal Accident", after=Inf)
+
+ggplot(t4, aes(x = factor(Time), y = RelFreq, fill = CrashDescriptor)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Damage Severity of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
 ```
 **Collision Type Description**
 
-```{r fig.width=15, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
-mosaic(CollisionTypeDescriptor~Time, direction=c("v", "h"), t6)
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+fillcolors <- brewer.pal(11, "Set3")
+
+# t6$CollisionTypeDescriptor <- fct_relevel(t6$CollisionTypeDescriptor,"Fatal Accident", after=Inf)
+
+ggplot(t6, aes(x = factor(Time), y = RelFreq, fill = CollisionTypeDescriptor)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Collision Type Descriptor of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
+
+# mosaic(CollisionTypeDescriptor~Time, direction=c("v", "h"), t6)
 ```
 
 
 **Traffic Control Condition**
-```{r fig.width=10, fig.height=10, echo=FALSE}
+```{r fig.width=8, echo=FALSE}
 h1 <- df_time_reason %>% 
-  group_by(time_hour, `Traffic Control Device`) %>% summarise(n=n()) %>%
+  group_by(time_hour, `Traffic Control Device`) %>% 
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   top_n(6) %>% ungroup()
 
 h1$`Traffic Control Device` <- h1$`Traffic Control Device` %>%
-  fct_relevel("None") %>% 
-  fct_recode(NP="No Passing Zone", None="None", Other="Other", Stop="Stop Sign", Signal="Traffic Signal", Y="Yield Sign", U="Unknown")
+  fct_relevel("Unknown","None")
 
-ggplot(h1, aes(x=`Traffic Control Device`, y=n)) + geom_col() + facet_wrap(~time_hour, nrow=6, ncol=4)
+fillcolors <- brewer.pal(7, "Set3")
+
+ggplot(h1, aes(x = factor(time_hour), y = RelFreq, fill = `Traffic Control Device`)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Traffic Control Device of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
 ```
 
 
 **Collision Details**
-```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 h2 <- df_time_reason %>% 
   filter(Collision_Type != "Collision With" ) %>%
   group_by(time_hour, Collision_Detail) %>%
-  summarise(n=n()) %>%
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   top_n(5) %>%
   ungroup()
 
-h2$Collision_Detail <- h2$Collision_Detail %>% fct_recode(E="Earth Embankment/Rock Cut/Ditch", G="Guide Rail - Not At End", Tree="Tree",
-                                                          U="Light Support/Utility Pole", Other="Other Fixed Object*", Sign="Sign Post") %>%
-  fct_relevel("Other", "Sign", after=Inf)
+h2$Collision_Detail <- h2$Collision_Detail %>% 
+  # fct_recode(E="Earth Embankment/Rock Cut/Ditch", G="Guide Rail - Not At End", Tree="Tree",
+  #            U="Light Support/Utility Pole", Other="Other Fixed Object*", Sign="Sign Post") %>%
+  fct_relevel("Other Fixed Object*", "Sign Post", after=Inf)
 
-ggplot(h2, aes(x=factor(Collision_Detail), y=n)) + 
-geom_col(fill="#8da675")+ 
-facet_wrap(~time_hour, nrow=6, ncol=4)+ 
-labs(x="", y="", title="Collision Details vs Time")
+ggplot(h2, aes(x = factor(time_hour), y = RelFreq, fill = Collision_Detail)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Collision Details of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
 ```
 
 
-```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 h3 <- df_time_reason %>% 
   filter(Collision_Type == "Collision With" ) %>% #, Collision_Detail != "Other Motor Vehicle")%>%
   group_by(time_hour, Collision_Detail) %>%
-  summarise(n=n()) %>%
+  summarise(Freq=n()) %>%
+  mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
 
-h3$Collision_Detail <- h3$Collision_Detail %>% fct_recode(Ani="Animal", Bike="Bicyclist", S="In-Line Skater", Vehicle="Other Motor Vehicle",
-                                  O="Other Object (Not Fixed)*", P="Pedestrian", Train="Railroad Train") %>%
-  fct_relevel('Vehicle', 'Ani','P')
+h3$Collision_Detail <- h3$Collision_Detail %>%
+# fct_recode(Ani="Animal", Bike="Bicyclist", S="In-Line Skater", Vehicle="Other Motor Vehicle",
+#                                   O="Other Object (Not Fixed)*", P="Pedestrian", Train="Railroad Train") %>%
+  fct_relevel("Other Motor Vehicle", after=Inf)
 
-ggplot(h3, aes(x=factor(Collision_Detail), y=n)) + 
-geom_col(fill="#8da675")+ 
-facet_wrap(~time_hour, nrow=6, ncol=4)+ 
-labs(x="", y="", title="Collision Details vs Time")
+ggplot(h3, aes(x = factor(time_hour), y = RelFreq, fill = Collision_Detail)) + 
+  geom_col() + 
+  scale_fill_manual(values = fillcolors) + 
+  ggtitle("Collision Details of Car Crashes") + 
+  labs(x = "Time", y = "Proportion") + 
+  theme_classic()
 ```
 
 
@@ -192,15 +261,15 @@ df_month <- df %>%
   mutate(Month = month(Date))
 
 df_light <- df_month %>%
-  select(Month, Lighting.Conditions) %>%
-  group_by(Month, Lighting.Conditions) %>%
+  select(Month, `Lighting Conditions`) %>%
+  group_by(Month, `Lighting Conditions`) %>%
   summarise(Freq=n()) %>%
   mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
 
 fillcolors <- brewer.pal(6, "Blues")
-df_light$Lighting.Conditions <- factor(df_light$Lighting.Conditions, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
-ggplot(df_light, aes(x = factor(Month), y = RelFreq, fill = Lighting.Conditions)) + 
+df_light$`Lighting Conditions` <- factor(df_light$`Lighting Conditions`, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
+ggplot(df_light, aes(x = factor(Month), y = RelFreq, fill = `Lighting Conditions`)) + 
   geom_col() + 
   scale_fill_manual(values = fillcolors) + 
   ggtitle("Lighting Conditions of Car Crashes") + 
@@ -210,18 +279,20 @@ ggplot(df_light, aes(x = factor(Month), y = RelFreq, fill = Lighting.Conditions)
 #mosaic(Lighting.Conditions ~ Month, direction=c("v", "h"), highlighting_fill = c("#F7FBFF", "#C6DBEF", "#6BAED6", "#4292C6", "#2171B5", "#084594"), df_light)
 
 ```
-```{r}
+
+
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
 df_weather <- df_month %>%
-  select(Month, Weather.Conditions) %>%
-  group_by(Month, Weather.Conditions) %>%
+  select(Month, `Weather Conditions`) %>%
+  group_by(Month, `Weather Conditions`) %>%
   summarise(Freq=n()) %>%
   mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
 
 fillcolors <- brewer.pal(8, "Blues")
-df_weather$Weather.Conditions <- factor(df_weather$Weather.Conditions, levels = c("Unknown", "Other*", "Clear", "Cloudy", "Fog/Smog/Smoke", "Rain", "Sleet/Hail/Freezing Rain", "Snow"))
-ggplot(df_weather, aes(x = factor(Month), y = RelFreq, fill = Weather.Conditions)) + 
+df_weather$`Weather Conditions` <- factor(df_weather$`Weather Conditions`, levels = c("Unknown", "Other*", "Clear", "Cloudy", "Fog/Smog/Smoke", "Rain", "Sleet/Hail/Freezing Rain", "Snow"))
+ggplot(df_weather, aes(x = factor(Month), y = RelFreq, fill = `Weather Conditions`)) + 
   geom_col() + 
   scale_fill_manual(values = fillcolors) + 
   ggtitle("Weather Conditions of Car Crashes") + 
@@ -278,7 +349,7 @@ ggplot(data=df_county, aes(x=long, y=lat)) +
 
 ## How
 
-**Top 10 Crahes Detail**
+**Top 10 Crashes Detail**
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
 df_detail <- df %>% 
@@ -302,14 +373,14 @@ tenMost <- list(df_detail$Collision_Detail)
 
 df_collision <- df_month %>%
   filter(Collision_Detail %in% df_detail$Collision_Detail) %>%
-  select(Collision_Detail, Road.Surface.Conditions) %>%
-  group_by(Collision_Detail, Road.Surface.Conditions) %>%
+  select(Collision_Detail, `Road Surface Conditions`) %>%
+  group_by(Collision_Detail, `Road Surface Conditions`) %>%
   summarise(Freq=n()) %>%
   mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
 
 fillcolors <- brewer.pal(8, "Blues")
-ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .desc = FALSE), fill = Road.Surface.Conditions)) + 
+ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .desc = FALSE), fill = `Road Surface Conditions`)) + 
   geom_col() + 
   scale_fill_manual(values = fillcolors) + 
   labs(x = "Proportion", y = "Collision Detail") +
@@ -321,10 +392,10 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
 df_RoSur <- df %>% 
-  group_by(Road.Surface.Conditions) %>%
+  group_by(`Road Surface Conditions`) %>%
   summarize(n = n())
 
-ggplot(df_RoSur, aes(x = fct_reorder(Road.Surface.Conditions, n, .desc = TRUE), y=n)) + 
+ggplot(df_RoSur, aes(x = fct_reorder(`Road Surface Conditions`, n, .desc = TRUE), y=n)) + 
   geom_col(fill="DarkBlue", alpha = 0.9) +
   labs(x="Road Surface Conditions", y="Frequency") + 
   ggtitle("Road Surface Conditions When Car Crashes Occurred") + 
@@ -338,15 +409,15 @@ ggplot(df_RoSur, aes(x = fct_reorder(Road.Surface.Conditions, n, .desc = TRUE), 
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
 df_light <- df %>%
-  select(Road.Surface.Conditions, Lighting.Conditions) %>%
-  group_by(Road.Surface.Conditions, Lighting.Conditions) %>%
+  select(`Road Surface Conditions`, `Lighting Conditions`) %>%
+  group_by(`Road Surface Conditions`, `Lighting Conditions`) %>%
   summarise(Freq=n()) %>%
   mutate(RelFreq = Freq / sum(Freq)) %>%
   ungroup()
 
 fillcolors <- brewer.pal(8, "Blues")
-df_light$Lighting.Conditions <- factor(df_light$Lighting.Conditions, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
-ggplot(df_light, aes(x = Road.Surface.Conditions, y = RelFreq, fill = Lighting.Conditions)) + 
+df_light$`Lighting Conditions` <- factor(df_light$`Lighting Conditions`, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
+ggplot(df_light, aes(x = `Road Surface Conditions`, y = RelFreq, fill = `Lighting Conditions`)) + 
   geom_col() + 
   scale_fill_manual(values = fillcolors) + 
   ggtitle("Lighting and Road Surface Conditions of Car Crashes") + 

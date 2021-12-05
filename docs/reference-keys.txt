@@ -28,3 +28,4 @@ collision-type-description
 traffic-control-condition
 collision-details
 issues-with-the-dataset
+how
