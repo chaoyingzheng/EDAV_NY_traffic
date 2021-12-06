@@ -31,6 +31,7 @@ df_time <- df %>% select(Time, Year) %>%
 ggplot(df_time, aes(hour,n, fill=factor(Year))) + 
   geom_bar(stat="identity", position=position_dodge()) + 
   scale_fill_brewer(palette="Set2") +
+  labs(fill = "Year")+
   theme_minimal()
 ```
 Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that `Lighting Conditions`, `Road Descriptor`, and `Crash Descriptor` are highly correlated with the hour in a day. The following bar plots examine each variable independently with time. Also `Collision_Detail` will be used to see what the actual reasons for crashing in each hour. 
@@ -206,6 +207,53 @@ wrap_plots(A = g2, B = g4, design = layout)
 ```
 
 
+**Midnight Peak**
+<br>
+We notice that an unusual peak at 00:00 in the total number cases time bar plot. At the same time, in the first two variables, at 0:00 25% of the cases are under Unknown, while compare to other time, this proportion is problematic. With the bar chart below, at 00:00:00, the number of cases is extremely higher than other time. For this result, we have the assumption that 00:00:00 is a position to dump cases with unclear time. To prove the assumption, the number of cases at 00:00:00 are replaced by the second largest number in 00:00. The histogram after cleaning this data is shown below, which support the assumption that 00:00 is not a actual crashes peak, and the crash is highly correlated with human activity. Even though the time of some cases is not accurate, but we decided not to remove them from the following analysis.
+```{r fig.width=8, echo=FALSE}
+df_midnight <- df %>%
+  # filter(`Lighting Conditions` != "Unknown", `Road Surface Conditions` != "Unknown",
+  #        `Road Descriptor` != "Unknown", `Weather Conditions` != "Unknown",
+  #         `Collision Type Descriptor` != "Unknown", `Traffic Control Device` != "Unknown",
+  #        `Road Surface Conditions` != "Unknown",hour(`Time`) == 0) %>%
+  filter(hour(`Time`) == 0) %>%
+  group_by(Year, Time) %>%
+  summarise(n = n()) %>%
+  ungroup()
+
+midnight_peak <- ggplot(df_midnight, aes(x=Time, y=n, fill=factor(Year))) +
+  geom_bar(stat="identity", position=position_dodge()) + 
+  scale_fill_brewer(palette="Set2") +
+  labs(fill = "Year", x="00:00", y="Frequency")+
+  theme_classic()
+
+df_clean_dip <- df %>%
+  group_by(Year, Time) %>%
+  summarise(n=n()) %>%
+  ungroup() %>%
+  mutate(hour = hour(Time)) %>%
+  group_by(Year, hour) %>%
+  mutate(n = ifelse(`Time`==00:00:00,0, n)) %>%
+  mutate(n = ifelse(`Time`==00:00:00,max(n), n)) %>%
+  ungroup() %>%
+  group_by(Year, hour) %>%
+  summarise(Freq=sum(n)) %>%
+  ungroup() 
+
+new_hour <-  ggplot(df_clean_dip, aes(hour,Freq, fill=factor(Year))) + 
+  geom_bar(stat="identity", position=position_dodge()) + 
+  scale_fill_brewer(palette="Set2") +
+  labs(fill = "Year", y="Frequency")+
+  theme_classic()
+
+layout <- "
+A
+B
+"
+
+wrap_plots(A = midnight_peak, B = new_hour, design=layout)
+```
+
 ### Month of Year
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 df %>% select(Date) %>%
@@ -313,6 +361,19 @@ ggplot(data=df_county, aes(x=long, y=lat)) +
 ```
 
 
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+df_fetal <- df_month %>%
+  filter(`Crash Descriptor` == "Fatal Accident")
+df_CF <- df_fetal %>% 
+  group_by(`County Name`) %>%
+  summarize(n = n()) 
+ggplot(df_CF, aes(y = fct_reorder(`County Name`, n, .desc = FALSE), x=n)) + 
+  geom_col(fill="Purple", alpha = 0.9) +
+  labs(x="Crash Detail", y="Frequency") + 
+  ggtitle("Top 10 Car Crashes Deatails") + 
+  theme_minimal()
+```
+
 ## How
 
 **Top 10 Crashes Detail**
@@ -323,7 +384,7 @@ df_detail <- df %>%
   summarize(n = n()) %>%
   slice_max(order_by = n, n = 10)
 
-ggplot(df_detail, aes(x = fct_reorder(Collision_Detail, n, .desc = TRUE), y=n)) + 
+ggplot(df_detail, aes(y = fct_reorder(Collision_Detail, n, .desc = FALSE), x=n)) + 
   geom_col(fill="Purple", alpha = 0.9) +
   labs(x="Crash Detail", y="Frequency") + 
   ggtitle("Top 10 Car Crashes Deatails") + 
@@ -419,3 +480,5 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
   ggtitle("Road Surface Condition of the Corresponding Type of Crashes") + 
   theme_classic()
 ```
+
+
