@@ -1,0 +1,31 @@
+"","Collision_Detail","n"
+"1","Other Motor Vehicle",645991
+"2","Animal",73696
+"3","Pedestrian",30154
+"4","Guide Rail - Not At End",18961
+"5","Earth Embankment/Rock Cut/Ditch",17170
+"6","Light Support/Utility Pole",14189
+"7","Tree",13394
+"8","Bicyclist",11927
+"9","Other Fixed Object*",8428
+"10","Sign Post",7200
+"11","Other Object (Not Fixed)*",6967
+"12","Building/Wall",4586
+"13","Curbing",3671
+"14","Other*",3150
+"15","Fence",3119
+"16","Snow Embankment",2959
+"17","Barrier",2775
+"18","Overturned",2198
+"19","Median - Not At End",2119
+"20","Guide Rail - End",2074
+"21","Ran Off Roadway Only",1512
+"22","Bridge Structure",1498
+"23","Fire Hydrant",1402
+"24","Fire/Explosion",861
+"25","Culver/Head Wall",751
+"26","Crash Cushion",389
+"27","Median - End",300
+"28","Submersion",135
+"29","Railroad Train",39
+"30","In-Line Skater",2

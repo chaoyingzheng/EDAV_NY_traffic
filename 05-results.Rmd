@@ -431,8 +431,8 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
 
 ```
 
-Through the mosaic plot above, we can see that within the top 10 Crashes details, car crashes that have collision with fixed object such as Earth Embankment/Rock Cut, Guide Rail, Tree, Light Support/Utility Pole and Sign Post are more likely to occurred under bad road conditions such as Wet, Muddy, Slush, Flooded Water or Snow/Ice comparing to collision with other motor vehicles, Animals and Bicyclist under the same road surface conditions.
 
+Through the mosaic plot above, we can see that within the top 10 Crashes details, car crashes that have collision with fixed object such as Earth Embankment/Rock Cut, Guide Rail, Tree, Light Support/Utility Pole and Sign Post are more likely to occurred under bad road conditions such as Wet, Muddy, Slush, Flooded Water or Snow/Ice comparing to collision with other motor vehicles, Animals and Bicyclist under the same road surface conditions.
 <br>
 Before we look into combination of lighting and road surface condition, it is resonable to look at each of them among all car crashes individually first.
 
@@ -447,6 +447,7 @@ ggplot(df_RoSur, aes(x = fct_reorder(`Road Surface Conditions`, n, .desc = TRUE)
   labs(x="Road Surface Conditions", y="Frequency") + 
   ggtitle("Road Surface Conditions When Car Crashes Occurred") + 
   theme_classic()
+
 
 ```
 

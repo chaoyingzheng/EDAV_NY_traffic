@@ -24,7 +24,7 @@
 <meta name="author" content="Chaoying Zheng, Haoyang Shen" />
 
 
-<meta name="date" content="2021-12-06" />
+<meta name="date" content="2021-12-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -146,7 +146,7 @@ The assumption for road descriptor is that during night curve conditions may hav
 <img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
 <p><strong>Damage Severity </strong>
 <br>
-Most of the crash in these two years are property damage accident. Injury accidentm, property damage &amp; injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but always happened during night and early morning.
+Most of the crash in these two years are property damage accident. Injury accident, property damage &amp; injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but happened during night and early morning more often.
 <img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
 <p><strong>Collision Details</strong></p>
 <p>There are total 30 levels for collision details, which is hard to illustrate in one plot. In the previous data cleaning part, collision details has a super class, collision type, which only have 3 levels (“Collision With”, “Collision With Fixed Object”, “Non-Collision”). The majority cases are under type “collision with”, so the first plot only contains the collision details that belongs to type “collision with”, and the second plot shows the top 6 levels in collision details for the remaining types “Non-Collision” and “Collision With Fixed Object”.</p>
@@ -156,7 +156,9 @@ Most of the crash in these two years are property damage accident. Injury accide
 <img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
 <p><strong>Midnight Peak</strong>
 <br>
-We notice that an unusual peak at 00:00 in the total number cases time bar plot. At the same time, in the first two variables, at 0:00 25% of the cases are under Unknown, while compare to other time, this proportion is problematic. With the bar chart below, at 00:00:00, the number of cases is extremely higher than other time. For this result, we have the assumption that 00:00:00 is a position to dump cases with unclear time. To prove the assumption, the number of cases at 00:00:00 are replaced by the second largest number in 00:00. The histogram after cleaning this data is shown below, which support the assumption that 00:00 is not a actual crashes peak, and the crash is highly correlated with human activity. Even though the time of some cases is not accurate, but we decided not to remove them from the following analysis.
+We notice that an unusual peak at 00:00 in the total number cases time bar plot. At the same time, in the first two variables, at 0:00 25% of the cases are under Unknown, while compare to other time, this proportion is problematic. With the bar chart below, at 00:00:00, the number of cases is extremely higher than other time.
+<br>
+For this result, we have the assumption that 00:00:00 is a position to dump cases with unclear time. To prove the assumption, the number of cases at 00:00:00 are replaced by the second largest number in 00:00. The histogram after cleaning this data is shown below, which support the assumption that 00:00 is not a actual crashes peak, and the crash is highly correlated with human activity. Even though the time of some cases is not accurate, but we decided not to remove them from the following analysis.
 <img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
 </div>
 <div id="month-of-year" class="section level3" number="5.1.2">
