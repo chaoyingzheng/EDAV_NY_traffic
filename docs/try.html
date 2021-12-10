@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Car Accident Visualization</title>
+    <style>
+      body {
+        margin: 0px；
+      }
+      .domain {
+        display: none;
+      }
+      .tick line {
+        stroke: #C0C0BB;
+      }
+      .tick text {
+        fill: #8E8883;
+        font-size: 10pt;
+        font-family: sans-serif;
+      }
+      .axis-label {
+        fill: #635F5D;
+        font-size: 20pt;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+
+    <svg width="900" height="500"></svg>
+    
+    <button type="button" onclick="add()">Add bar: <br> The Next More Frequent Crashes Detail</button>
+    <br>
+    <br>
+    <button type="button" onclick="remove()">Remove bar: <br> Remove the one just added</button>
+
+  <script>
+  
+      var svg = d3.select('svg');
+      var w = 800;
+      var h = 400;
+      var margin = {
+        left: 100,
+        right: 15,
+        top: 60,
+        bottom: 60,
+      };
+      
+      var innerWidth = w - margin.left - margin.right;
+      var innerHeight = h - margin.top - margin.bottom;
+      
+      var currentdata =[ {'key': 25, 'detail': 'Crash Cushion', 'value': 389}, {'key': 26, 'detail': 'Median - End', 'value': 300}, {'key': 27, 'detail': 'Submersion', 'value': 135}, {'key': 28, 'detail': 'Railroad Train', 'value': 39}, {'key': 29, 'detail': 'In-Line Skater', 'value': 2}]
+      
+      var bardata = [{'key': 0, 'detail': 'Other Motor Vehicle', 'value': 645991}, {'key': 1, 'detail': 'Animal', 'value': 73696}, {'key': 2, 'detail': 'Pedestrian', 'value': 30154}, {'key': 3, 'detail': 'Guide Rail - Not At End', 'value': 18961}, {'key': 4, 'detail': 'Earth Embankment/Rock Cut/Ditch', 'value': 17170}, {'key': 5, 'detail': 'Light Support/Utility Pole', 'value': 14189}, {'key': 6, 'detail': 'Tree', 'value': 13394}, {'key': 7, 'detail': 'Bicyclist', 'value': 11927}, {'key': 8, 'detail': 'Other Fixed Object*', 'value': 8428}, {'key': 9, 'detail': 'Sign Post', 'value': 7200}, {'key': 10, 'detail': 'Other Object (Not Fixed)*', 'value': 6967}, {'key': 11, 'detail': 'Building/Wall', 'value': 4586}, {'key': 12, 'detail': 'Curbing', 'value': 3671}, {'key': 13, 'detail': 'Other*', 'value': 3150}, {'key': 14, 'detail': 'Fence', 'value': 3119}, {'key': 15, 'detail': 'Snow Embankment', 'value': 2959}, {'key': 16, 'detail': 'Barrier', 'value': 2775}, {'key': 17, 'detail': 'Overturned', 'value': 2198}, {'key': 18, 'detail': 'Median - Not At End', 'value': 2119}, {'key': 19, 'detail': 'Guide Rail - End', 'value': 2074}, {'key': 20, 'detail': 'Ran Off Roadway Only', 'value': 1512}, {'key': 21, 'detail': 'Bridge Structure', 'value': 1498}, {'key': 22, 'detail': 'Fire Hydrant', 'value': 1402}, {'key': 23, 'detail': 'Fire/Explosion', 'value': 861}, {'key': 24, 'detail': 'Culver/Head Wall', 'value': 751}]
+  
+      var xScale = d3.scaleBand()
+      .domain(currentdata.map(d => d.detail))
+      .range([0, innerWidth])
+      .paddingInner(.1);
+
+      var yScale = d3.scaleLinear()
+      .domain([0, d3.max(currentdata.map(d => d.value))])
+      .range([innerHeight, 0]);
+      
+      var xAxis = d3.axisBottom()
+      .scale(xScale);
+      
+      var yAxis = d3.axisLeft()
+      .scale(yScale);
+      
+    
+     svg
+        .append('text')
+        .attr('x', 50 + innerWidth / 2)
+        .attr('y', 30)
+        .style('text-anchor', 'middle')
+        .attr('class', 'axis-label')
+        .text(
+          'Frequency of Collision Details'
+        );
+
+      
+      var bars = svg.append("g")
+      .attr("id", "plot")
+      .attr("transform", `translate (${margin.left}, ${margin.top})`)
+      .selectAll("rect")
+      .data(currentdata, d => d);
+      
+      bars.enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", d => xScale(d.detail))
+      .attr("y", d => yScale(d.value))
+      .attr("width", xScale.bandwidth())
+      .attr("height", d => innerHeight - yScale(d.value))
+      .attr("fill","lightblue");
+      
+      svg.append("g")
+      .attr("class", "xAxis")
+      .attr("transform", `translate (${margin.left}, ${h - margin.bottom})`)
+      .call(xAxis) .selectAll("text")
+      .attr("transform", "translate(-10,0)rotate(-45)")
+      .style("text-anchor", "end");
+      
+      svg.append("g")
+      .attr("class", "yAxis")
+      .attr("transform", `translate (${margin.left}, ${margin.top})`)
+      .call(yAxis);
+
+      svg
+          .append('text')
+          .attr('x', 50)
+          .attr('y', 730)
+          .text('Collision Types:');
+    
+        x_start = 60;
+        y_start = 750;
+        x_skip = 250;
+        collisionType = ['Collision with Subject', 
+                      'Collision with Fixed Object', 
+                      'Non-Collision']
+        for (k = 0; k < 3; k++) {
+          svg
+            .append('circle')
+            .attr('cx', x_start + x_skip * k)
+            .attr('cy', y_start)
+            .attr('r', 5)
+            .attr('fill', 'white')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
+            .attr('class', 'utls')
+            .datum(collisionType[k]);
+
+          svg
+            .append('text')
+            .attr('x', x_start + 8 + x_skip * k)
+            .attr('y', y_start + 4)
+            .text(collisionType[k])
+            .attr('font-size', '15px')
+            .attr('font-weight', 'bold');
+        }
+
+        k = 3;
+    svg
+          .append('circle')
+          .attr('cx', x_start + x_skip * k)
+          .attr('cy', y_start)
+          .attr('r', 5)
+          .attr('fill', 'white')
+          .attr('stroke', 'black')
+          .attr('stroke-width', 2)
+          .attr('id', 'clear')
+          .attr('class', 'utls');
+
+        svg
+          .append('text')
+          .attr('x', x_start + 8 + x_skip * k)
+          .attr('y', y_start + 4)
+          .text('Clear')
+          .attr('font-size', '15px')
+          .attr('font-weight', 'bold');
+          
+          
+// General Update Pattern
+
+  function update(data) {
+
+    xScale.domain(data.map(d => d.detail));
+
+    yScale.domain([0, d3.max(data.map(d => d.value))]);
+
+    var bars = svg.select("#plot")
+        .selectAll("rect")
+        .data(data, d => d.key);
+
+    bars.enter().append("rect")
+      .attr("x", d => xScale(d.detail))
+      .attr("y", d => innerHeight)
+      .attr("width", xScale.bandwidth())
+      .attr("height", d => 0)
+      .attr("fill", "orange")
+      .merge(bars)
+      .transition()
+      .duration(2000)
+      .ease(d3.easeLinear)
+      .attr("x", d => xScale(d.detail))
+      .attr("y", d => yScale(d.value))
+      .attr("width", xScale.bandwidth())
+      .attr("height", d => innerHeight - yScale(d.value))
+      .transition()
+      .duration(1000)
+      .ease(d3.easeLinear)
+      .attr("fill", "lightblue");
+
+    bars.exit()
+      .transition()
+      .duration(1600)
+      .ease(d3.easeLinear)
+      .attr("x", w*(1.1))
+      .remove();
+
+    svg.select(".xAxis")
+      .transition()
+      .duration(1600)
+      .ease(d3.easeLinear)
+      .call(xAxis)
+      .selectAll("text")
+      .attr("transform", "translate(-10,0)rotate(-45)")
+      .style("text-anchor", "end");
+
+    svg.select(".yAxis")
+      .transition()
+      .duration(2000)
+      .ease(d3.easeLinear)
+      .call(yAxis);
+
+  }
+
+    function add() {
+      var newvalue = bardata[bardata.length - 1];
+      bardata.pop();
+      currentdata.unshift(newvalue);
+      console.log(currentdata);
+      update(currentdata);
+    }
+
+    function remove() {
+      var lastvalue = currentdata[0];
+      currentdata.shift();
+      bardata.push(lastvalue);
+      update(currentdata);
+      };
+    
+      </script>
+  </body>
+</html>
+
