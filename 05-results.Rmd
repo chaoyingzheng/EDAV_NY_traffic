@@ -2,13 +2,12 @@
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(readr)
-#df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
+df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-df <- read_csv("~/Downloads/cash_information_clean.csv")
+#df <- read.csv("~/Downloads/cash_information_clean.csv")
 
 #df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```
-
 
 ## When
 ```{r include=FALSE}
@@ -32,8 +31,8 @@ df_time <- df %>% select(Time, Year) %>%
 ggplot(df_time, aes(hour,n, fill=factor(Year))) + 
   geom_bar(stat="identity", position=position_dodge()) + 
   scale_fill_brewer(palette="Set2") +
-  labs(fill = "Year")+
-  theme_minimal()
+  labs(fill = "Year", x="Time", y="Frequency", title="Crashes in one day")+
+  theme_classic()
 ```
 Here is an overview of number of crash occur in 24 hours in 2018 and 2019. Firstly, there are three peaks in the plot: 0:00, 8:00 and 17:00. Commuting peak can be considered as the major reason for peaks at 8:00 and 17:00. The reason for 0:00 will be explored in details later. Secondly, we assume that `Lighting Conditions`, `Road Descriptor`, and `Crash Descriptor` are highly correlated with the hour in a day. The following bar plots examine each variable independently with time. Also `Collision_Detail` will be used to see what the actual reasons for crashing in each hour. 
 
@@ -126,7 +125,7 @@ ggplot(t2, aes(x = factor(Time), y = RelFreq, fill = RoadDescriptor)) +
 
 **Damage Severity **
 <br>
-Most of the crash in these two years are property damage accident. Injury accidentm, property damage & injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but always happened during night and early morning. 
+Most of the crash in these two years are property damage accident. Injury accident, property damage & injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but happened during night and early morning more often. 
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 fillcolors <- brewer.pal(4, "Set3")
 
@@ -210,7 +209,9 @@ wrap_plots(A = g2, B = g4, design = layout)
 
 **Midnight Peak**
 <br>
-We notice that an unusual peak at 00:00 in the total number cases time bar plot. At the same time, in the first two variables, at 0:00 25% of the cases are under Unknown, while compare to other time, this proportion is problematic. With the bar chart below, at 00:00:00, the number of cases is extremely higher than other time. For this result, we have the assumption that 00:00:00 is a position to dump cases with unclear time. To prove the assumption, the number of cases at 00:00:00 are replaced by the second largest number in 00:00. The histogram after cleaning this data is shown below, which support the assumption that 00:00 is not a actual crashes peak, and the crash is highly correlated with human activity. Even though the time of some cases is not accurate, but we decided not to remove them from the following analysis.
+We notice that an unusual peak at 00:00 in the total number cases time bar plot. At the same time, in the first two variables, at 0:00 25% of the cases are under Unknown, while compare to other time, this proportion is problematic. With the bar chart below, at 00:00:00, the number of cases is extremely higher than other time. 
+<br>
+For this result, we have the assumption that 00:00:00 is a position to dump cases with unclear time. To prove the assumption, the number of cases at 00:00:00 are replaced by the second largest number in 00:00. The histogram after cleaning this data is shown below, which support the assumption that 00:00 is not a actual crashes peak, and the crash is highly correlated with human activity. Even though the time of some cases is not accurate, but we decided not to remove them from the following analysis.
 ```{r fig.width=8, echo=FALSE}
 df_midnight <- df %>%
   # filter(`Lighting Conditions` != "Unknown", `Road Surface Conditions` != "Unknown",
@@ -225,7 +226,7 @@ df_midnight <- df %>%
 midnight_peak <- ggplot(df_midnight, aes(x=Time, y=n, fill=factor(Year))) +
   geom_bar(stat="identity", position=position_dodge()) + 
   scale_fill_brewer(palette="Set2") +
-  labs(fill = "Year", x="00:00", y="Frequency")+
+  labs(fill = "Year", x="00:00", y="Frequency", title="Crashes at midnight")+
   theme_classic()
 
 df_clean_dip <- df %>%
@@ -244,7 +245,7 @@ df_clean_dip <- df %>%
 new_hour <-  ggplot(df_clean_dip, aes(hour,Freq, fill=factor(Year))) + 
   geom_bar(stat="identity", position=position_dodge()) + 
   scale_fill_brewer(palette="Set2") +
-  labs(fill = "Year", y="Frequency")+
+  labs(fill = "Year", y="Frequency",x="Time", title="Crashes in one day with dumping event removed")+
   theme_classic()
 
 layout <- "
@@ -254,7 +255,6 @@ B
 
 wrap_plots(A = midnight_peak, B = new_hour, design=layout)
 ```
-
 
 ### Month of Year
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
@@ -267,10 +267,8 @@ ggplot(aes(factor(Month),n)) +
   geom_col(fill="#35978F", alpha = 0.9) +
   labs(x="Month", y="Frequency") + 
   ggtitle("Car Crashes Occurred Each Month during 2018-2019") + 
-  theme_minimal() 
+  theme_classic() 
 ```
-
-
 The bar plots above shows the number of car crashes occurred on each month accumulating 2018 and 2019. While the differences between each month are not tremendous, we could still observe that the number of crashes that happened in October, November, December and January are higher than the other months in a year. 
 <br>
 Remarkably, the four months that have highest number of car crashes occurred are cluster together, and these four months covers almost the whole winter season. Considering the season factor, the weather conditions are different in winter than other season, and the daytime are shorter in winter which the lighting condition could be different as well. To get further information for car crashes that occurred in these four months, we will visulize through the mosiac plots between months and lighting conditions and weather conditions.
@@ -316,17 +314,15 @@ ggplot(df_weather, aes(x = factor(Month), y = RelFreq, fill = `Weather Condition
   scale_fill_manual(values = fillcolors) + 
   ggtitle("Weather Conditions of Car Crashes") + 
   labs(x = "Month", y = "Proportion") + 
-  
   theme_classic()
 
 ```
-    Looking at the two plots above, for the first plot, we can obverse that for the car crashes that occurred during October, November, December and January, the proportion of having lighting conditions of "Dark-Road Lighted" and "Dark-Road Unlighted" when crashes occurred are higher than those in the other months. While most of the crashes happened under the "Daylight" lighting condition, it is still worth noticing that how the proportion of lighting condition changed when the crashes occurred within these four months.
-   <br>
-   In addition to seeing the lighting conditions, in the second plot showing the proportion of weather conditions when the car crashes occurred, we can observe that around 10 to 18 percent of car crashes occurred in November, December and January are under the "Snow" or "Sleet/Hail/Freezing Rain" weather condition. Since the weather condition vary objective to the time period (season) during a year, we cannot infer weather the higher number of crashes in these four months are due to change in the weather conditions.
-
+Looking at the two plots above, for the first plot, we can obverse that for the car crashes that occurred during October, November, December and January, the proportion of having lighting conditions of "Dark-Road Lighted" and "Dark-Road Unlighted" when crashes occurred are higher than those in the other months. While most of the crashes happened under the "Daylight" lighting condition, it is still worth noticing that how the proportion of lighting condition changed when the crashes occurred within these four months.
+<br>
+In addition to seeing the lighting conditions, in the second plot showing the proportion of weather conditions when the car crashes occurred, we can observe that around 10 to 18 percent of car crashes occurred in November, December and January are under the "Snow" or "Sleet/Hail/Freezing Rain" weather condition. Since the weather condition vary objective to the time period (season) during a year, we cannot infer weather the higher number of crashes in these four months are due to change in the weather conditions.
     
 ## Where
-    The state of New York covers a total area of 54,555 square miles, containing in total 62 counties. Considering the large area, it is helpful to see further the location where car crashes happened more than the other. To observe this patterns, we used a map of New York State with boundaries of counties.
+The state of New York covers a total area of 54,555 square miles, containing in total 62 counties. Considering the large area, it is helpful to see further the location where car crashes happened more than the other. To observe this patterns, we used a map of New York State with boundaries of counties.
 ```{r echo=FALSE, fig.height=20, fig.width=30, message=FALSE, warning=FALSE}
 ny_county <- subset(map_data("county"), region == "new york") 
   
@@ -368,11 +364,13 @@ ggplot(data=df_county, aes(x=long, y=lat)) +
   theme(panel.background = element_blank(), plot.title = element_text(hjust = 0.5)) +
   inset_element(embed_plot,0.01, 0.01, 0.35, 0.35)
 ```
-    The graph above shows the number of car crashes that occurred in each counties in New York State, where the darker green color indicates the more car crashes in such areas (counties). We can obverse that comparing to other counties in NY, the number of car crashes occurred in counties in the Manhattan Areas are much larger. More specifically, these counties are Suffolk, Queens, Nassau and Kings. 
-    <br>
-    Note that for all car crashes, there are different severity. The measurement we choose to use is one of the variables, "Crash Descriptor", which describing the outcome of a car crashes. There are four factor levels, in the order of "Property Damage Accident", "Injury Accident", "Property Damage & Injury Accident" and "Fatal Accident". Clearly, a "Fatal Accident" is the most severe outcome for a car crash. 
 
-```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+The graph above shows the number of car crashes that occurred in each counties in New York State, where the darker green color indicates the more car crashes in such areas (counties). We can obverse that comparing to other counties in NY, the number of car crashes occurred in counties in the Manhattan Areas are much larger. More specifically, these counties are Suffolk, Queens, Nassau and Kings. 
+    <br>
+Note that for all car crashes, there are different severity. The measurement we choose to use is one of the variables, "Crash Descriptor", which describing the outcome of a car crashes. There are four factor levels, in the order of "Property Damage Accident", "Injury Accident", "Property Damage & Injury Accident" and "Fatal Accident". Clearly, a "Fatal Accident" is the most severe outcome for a car crash.
+
+```{r fig.width=8, fig.height=10, message=FALSE, warning=FALSE, echo=FALSE}
+options(scipen=999)
 df_fetal <- df_month %>%
   filter(`Crash Descriptor` == "Fatal Accident")
 df_CF <- df_fetal %>% 
@@ -380,13 +378,12 @@ df_CF <- df_fetal %>%
   summarize(n = n()) 
 ggplot(df_CF, aes(y = fct_reorder(`County Name`, n, .desc = FALSE), x=n)) + 
   geom_col(fill="Purple", alpha = 0.9) +
-  labs(x="Crash Detail", y="Counties") + 
-  ggtitle("Number of Fatal Accident in Each Counties in NY") + 
-  theme_minimal()
+  labs(x="Crash Detail", y="Frequency") + 
+  ggtitle("Top 10 Car Crashes Details") + 
+  theme_classic()
 ```
 
 The horizon bar plot above shows the number of fatal accidents caused by motor vehicle crashes in the different counties in NY. The top four counties consistent with the results from the previous plot, which the four counties have the most car crashes has higher fatal accidents than the rest of counties.
-
 
 ## How
 
@@ -401,13 +398,13 @@ df_detail <- df %>%
 ggplot(df_detail, aes(y = fct_reorder(Collision_Detail, n, .desc = FALSE), x=n)) + 
   geom_col(fill="Purple", alpha = 0.9) +
   labs(x="Crash Detail", y="Frequency") + 
-  ggtitle("Top 10 Car Crashes Deatails") + 
-  theme_minimal()
+  ggtitle("Top 10 Car Crashes Details") + 
+  theme_classic()
 
 ```
-    Within the dataset, there is a variable providing the details of each crash case which give us the information of the type of collision. In total, there are 30 different situations. We pick the top 10 types which take over 80 percents of all crashes that occurred for analysis. According to the bar plot above, more than 70 percent of the crashes are collision with other motor vehicle and the following by collision with subject including Animal, Pedestrian, Bicyclist and fix objects such as Tree, Guide Rail and Sign Post. 
-    <br>
-   Considering that Road surface conditions and lighting conditions are two factor that would affecting a driver, we would look deeper into the crashes detail from the aspect of Road Surface Condition and lighting conditions. 
+Within the dataset, there is a variable providing the details of each crash case which give us the information of the type of collision. In total, there are 30 different situations. We pick the top 10 types which take over 80 percents of all crashes that occurred for analysis. According to the bar plot above, more than 70 percent of the crashes are collision with other motor vehicle and the following by collision with subject including Animal, Pedestrian, Bicyclist and fix objects such as Tree, Guide Rail and Sign Post.
+<br>
+Considering that Road surface conditions and lighting conditions are two factor that would affecting a driver, we would look deeper into the crashes detail from the aspect of Road Surface Condition and lighting conditions.
 
 **Road Surface patterns correspond to these top 10 type of Crashes**
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
@@ -433,12 +430,14 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
   theme_classic()
 
 ```
-    Through the mosaic plot above, we can see that within the top 10 Crashes details, car crashes that have collision with fixed object such as Earth Embankment/Rock Cut, Guide Rail, Tree, Light Support/Utility Pole and Sign Post are more likely to occurred under bad road conditions such as Wet, Muddy, Slush, Flooded Water or Snow/Ice comparing to collision with other motor vehicles, Animals and Bicyclist under the same road surface conditions.
-  <br>
-  Before we look into combination of lighting and road surface condition, it is resonable to look at each of them among all car crashes individually first.
-  
-```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
+Through the mosaic plot above, we can see that within the top 10 Crashes details, car crashes that have collision with fixed object such as Earth Embankment/Rock Cut, Guide Rail, Tree, Light Support/Utility Pole and Sign Post are more likely to occurred under bad road conditions such as Wet, Muddy, Slush, Flooded Water or Snow/Ice comparing to collision with other motor vehicles, Animals and Bicyclist under the same road surface conditions.
+
+<br>
+Before we look into combination of lighting and road surface condition, it is resonable to look at each of them among all car crashes individually first.
+
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+options(scipen=999)
 df_RoSur <- df %>% 
   group_by(`Road Surface Conditions`) %>%
   summarize(n = n())
@@ -447,12 +446,13 @@ ggplot(df_RoSur, aes(x = fct_reorder(`Road Surface Conditions`, n, .desc = TRUE)
   geom_col(fill="DarkBlue", alpha = 0.9) +
   labs(x="Road Surface Conditions", y="Frequency") + 
   ggtitle("Road Surface Conditions When Car Crashes Occurred") + 
-  theme_minimal()
+  theme_classic()
 
 ```
-    The plot above shows the frequency of road surface condition when car crashes happened in a descending order. Comparing the intuitive hypothesis that car crashes should occurred more frequent under wet, snow/Ice or even worst road condition, the data shows that actually most of the car crashes accidents occurred under the dry condition. However, it is still noticeable that the number of car crashes occurred under wet or snow/ice condition still be the second and third highest among all.
 
-```{r}
+The plot above shows the frequency of road surface condition when car crashes happened in a descending order. Comparing the intuitive hypothesis that car crashes should occurred more frequent under wet, snow/Ice or even worst road condition, the data shows that actually most of the car crashes accidents occurred under the dry condition. However, it is still noticeable that the number of car crashes occurred under wet or snow/ice condition still be the second and third highest among all.
+
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
 df_lighting <- df %>% 
   group_by(`Lighting Conditions`) %>%
@@ -465,11 +465,12 @@ ggplot(df_lighting, aes(x = fct_reorder(`Lighting Conditions`, n, .desc = TRUE),
   theme_minimal()
 
 ```
-   Similar to the road surface condition, the frequency for lighting conditions when car crashes occurred are out of our intuitive expectation. Most of the car crashes occurred under daylight instead of Dusk, Dawn or Dark-Road, which is reasonable if we think deeper since the traffic flow are much higher during the day, active time for human. This is consistent with the results in the previous "When" section. Nevertheless, it worths noticing that the second and third highest lighting conditions when crashes occurred are lighted dark-road and unlighted dark road.
-   
+
+Similar to the road surface condition, the frequency for lighting conditions when car crashes occurred are out of our intuitive expectation. Most of the car crashes occurred under daylight instead of Dusk, Dawn or Dark-Road, which is reasonable if we think deeper since the traffic flow are much higher during the day, active time for human. This is consistent with the results in the previous "When" section. Nevertheless, it worths noticing that the second and third highest lighting conditions when crashes occurred are lighted dark-road and unlighted dark road.
+
 
 **Combination: Lighting Conditions and Road Surface Condition**
-    After looking at the road surface conditions, we would like to go even further to see car crashes relevent to light conditions as well.
+After looking at the road surface conditions, we would like to go even further to see car crashes relevent to light conditions as well.
 ```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
 
 df_light <- df %>%
@@ -480,6 +481,7 @@ df_light <- df %>%
   ungroup()
 
 fillcolors <- brewer.pal(8, "Blues")
+
 df_light$`Lighting Conditions` <- factor(df_light$`Lighting Conditions`, levels = c("Unknown", "Daylight", "Dawn", "Dusk", "Dark-Road Lighted", "Dark-Road Unlighted"))
 df_light$`Road Surface Conditions` <- factor(df_light$`Road Surface Conditions`, levels = c("Dry", "Wet", "Muddy", "Slush", "Flooded Water", "Snow/Ice", "Other", "Unknown"))
 
@@ -491,12 +493,13 @@ ggplot(df_light, aes(x = `Road Surface Conditions`, y = RelFreq, fill = `Lightin
   theme_classic()
 
 ```
-    While the patterns are not clear when first looking at the plot, some points are worth to notice if looking more carefully. For car crashes that under the Dark-Road Unlighted condition, more of them are occurring under Muddy and Snow/Ice conditions road surface condition, while for car crashes that occurred under Dark-Road Lighted condition, more of them are occurring under Wet and Flooded Water road surface condition. In other words, the combination of the dark unlighted road with muddy surface, is more dangerous than combination of the dark unlighted road with other road surface conditions.  
 
+While the patterns are not clear when first looking at the plot, some points are worth to notice if looking more carefully. For car crashes that under the Dark-Road Unlighted condition, more of them are occurring under Muddy and Snow/Ice conditions road surface condition, while for car crashes that occurred under Dark-Road Lighted condition, more of them are occurring under Wet and Flooded Water road surface condition. In other words, the combination of the dark unlighted road with muddy surface, is more dangerous than combination of the dark unlighted road with other road surface conditions.
 
 **Traffic Control Condition**
-  Traffic control devices act a very important role on help us avoid accidents. These devices gives us important information or warning to keep us safe such as traffic signal, stop signs... Thus, to explore even more on the top 10 types of crashes, we would like look at the situations that traffic devices are presented when car crashes occured. 
+Traffic control devices act a very important role on help us avoid accidents. These devices gives us important information or warning to keep us safe such as traffic signal, stop signs... Thus, to explore even more on the top 10 types of crashes, we would like look at the situations that traffic devices are presented when car crashes occurred.  
 ```{r fig.width=8, echo=FALSE}
+
 
 tenMost <- list(df_detail$Collision_Detail)
 
@@ -519,4 +522,6 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
   ggtitle("Road Surface Condition of the Corresponding Type of Crashes") + 
   theme_classic()
 ```
-   We can observe that for car crash occurred when traffic control devices were presented, most of collision with pedestrian, bicyclist and other motor vehicle occurred when traffic signal presented. On the other hand, most of collision with fixed objects including tree, guide rail and earth embankment/rock cut, and animals occurred in No Passing Zone. Interestingly, such patterns we observed are actually confirming the functionality of traffic control devices.
+
+We can observe that for car crash occurred when traffic control devices were presented, most of collision with pedestrian, bicyclist and other motor vehicle occurred when traffic signal presented. On the other hand, most of collision with fixed objects including tree, guide rail and earth embankment/rock cut, and animals occurred in No Passing Zone. Interestingly, such patterns we observed are actually confirming the functionality of traffic control devices.
+
