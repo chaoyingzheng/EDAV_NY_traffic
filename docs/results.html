@@ -24,7 +24,7 @@
 <meta name="author" content="Chaoying Zheng, Haoyang Shen" />
 
 
-<meta name="date" content="2021-12-09" />
+<meta name="date" content="2021-12-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -105,6 +105,7 @@
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#where"><i class="fa fa-check"></i><b>5.2</b> Where</a></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#how"><i class="fa fa-check"></i><b>5.3</b> How</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#appendix"><i class="fa fa-check"></i><b>5.4</b> Appendix</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -142,53 +143,70 @@ The variation for lighting condition matches time. During day time, the majority
 <p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
 <p><strong>Road Descriptor</strong>
 <br>
-The assumption for road descriptor is that during night curve conditions may have more cases than straight conditions. However, the plot indicates that the road descriptor doesn’t have a obvious correlation with time. In one day, most of the cases were under the straight and level condition, which is the major condition of most of the road in the states.
-<img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+The assumption for road descriptor is that during night curve conditions may have more cases than straight conditions. However, the figure <em>Road Descriptor of Car Crashes</em> in Appendix indicates that the road descriptor doesn’t have a obvious correlation with time. In one day, most of the cases were under the straight and level condition, which is the major condition of most of the road in the states.</p>
 <p><strong>Damage Severity </strong>
 <br>
-Most of the crash in these two years are property damage accident. Injury accident, property damage &amp; injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but happened during night and early morning more often.
-<img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+Most of the crash in these two years are property damage accident. Injury accident, property damage &amp; injury accident, and property damage accident have similar distribution through all the time during one day. The proportion of fatal accident is very small, but happened during night and early morning more often. See figure <em>Damage Severity of Car Crashes</em> in Appendix.</p>
 <p><strong>Collision Details</strong></p>
 <p>There are total 30 levels for collision details, which is hard to illustrate in one plot. In the previous data cleaning part, collision details has a super class, collision type, which only have 3 levels (“Collision With”, “Collision With Fixed Object”, “Non-Collision”). The majority cases are under type “collision with”, so the first plot only contains the collision details that belongs to type “collision with”, and the second plot shows the top 6 levels in collision details for the remaining types “Non-Collision” and “Collision With Fixed Object”.</p>
-<p>For collision with subject, motor vehicle collisions are over 50% of the cases, which doesn’t have a obvious correlation with time. The second highest proportion is collision with animal, which has a peak in the morning around 5:00 and remains low proportion during day time. The animal activity and human activity can explain this phenomenon. Usually, animal activate when human activity reduces, which is during night and early morning. Other collision details, such as collision with bicyclist and pedestrain are not correlated with time.
-<img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
-<p>As the plots shown below, details in both types are not have a correlation with the time. Details will be used in the follwing section to explore with other variables.
-<img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p>For collision with subject, motor vehicle collisions are over 50% of the cases, which doesn’t have a obvious correlation with time. The second highest proportion is collision with animal, which has a peak in the morning around 5:00 and remains low proportion during day time. The animal activity and human activity can explain this phenomenon. Usually, animal activate when human activity reduces, which is during night and early morning. Other collision details, such as collision with bicyclist and pedestrian are not correlated with time.</p>
+<p>For collision with fixed object and non-collision cases, there are no correlations with time. See figure in Appendix for details. Details will be used in the following section to explore relationship with other variables.
+<img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
 <p><strong>Midnight Peak</strong>
 <br>
 We notice that an unusual peak at 00:00 in the total number cases time bar plot. At the same time, in the first two variables, at 0:00 25% of the cases are under Unknown, while compare to other time, this proportion is problematic. With the bar chart below, at 00:00:00, the number of cases is extremely higher than other time.
 <br>
 For this result, we have the assumption that 00:00:00 is a position to dump cases with unclear time. To prove the assumption, the number of cases at 00:00:00 are replaced by the second largest number in 00:00. The histogram after cleaning this data is shown below, which support the assumption that 00:00 is not a actual crashes peak, and the crash is highly correlated with human activity. Even though the time of some cases is not accurate, but we decided not to remove them from the following analysis.
-<img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
 </div>
 <div id="month-of-year" class="section level3" number="5.1.2">
 <h3><span class="header-section-number">5.1.2</span> Month of Year</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="768" />
-The bar plots above shows the number of car crashes occurred on each month accumulating 2018 and 2019. While the differences between each month are not tremendous, we could still observe that the number of crashes that happened in October, November, December and January are higher than the other months in a year.
-Remarkably, the four months that have highest number of car crashes occurred are cluster together, and these four months covers almost the whole winter season. Considering the season factor, the weather conditions are different in winter than other season, and the daytime are shorter in winter which the lighting condition could be different as well. To get further information for car crashes that occurred in these four months, we will visulize through the mosiac plots between months and lighting conditions and weather conditions.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="768" />
-Looking at the two plots above, for the first plot, we can obverse that for the car crashes that occurred during October, November, December and January, the proportion of having lighting conditions of “Dark-Road Lighted” and “Dark-Road Unlighted” when crashes occurred are higher than those in the other months. While most of the crashes happened under the “Daylight” lighting condition, it is still worth noticing that how the proportion of lighting condition changed when the crashes occurred within these four months.
-In addition to seeing the lighting conditions, in the second plot showing the proportion of weather conditions when the car crashes occurred, we can observe that around 10 to 18 percent of car crashes occurred in November, December and January are under the “Snow” or “Sleet/Hail/Freezing Rain” weather condition. Since the weather condition vary objective to the time period (season) during a year, we cannot infer weather the higher number of crashes in these four months are due to change in the weather conditions.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="768" />
+The bar plots above shows the number of car crashes occurred on each month accumulating 2018 and 2019. While the differences between each month are not tremendous, we could still observe that the number of crashes that happened in October, November, December and January are higher than other months in a year.
+<br>
+Remarkably, the four months that have highest number of car crashes occurred are cluster together, which cover almost the winter season. Considering the season factor, the weather conditions are worse in winter than other seasons, and the daytime are shorter in winter so the lighting condition will responsible for more cases. To get further information for car crashes that occurred in these four months, we will visualize through the mosaic plots between months with lighting conditions and weather conditions.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="768" />
+In the first plot, we can obverse that for the car crashes that occurred during October, November, December and January, the proportion of having lighting conditions of “Dark-Road Lighted” and “Dark-Road Unlighted” when crashes occurred are higher than those in the other months. While most of the crashes happened under the “Daylight” lighting condition, it is still worth noticing that how the proportion of lighting condition changed when the crashes occurred within these four months.
+<br>
+The second plot shows the proportion of weather conditions when the car crashes occurred, we can observe that around 10% to 18% of car crashes occurred in November, December and January are under the “Snow” or “Sleet/Hail/Freezing Rain” conditions. Since the weather condition varies objective to the time period (season) during a year, we cannot infer whether the higher number of crashes in winter are due to change of weather.</p>
 </div>
 </div>
 <div id="where" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Where</h2>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="2880" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+<p>New York State covers a total area of 54,555 square miles and contains in total 62 counties. Considering the large area, it is helpful to see further that where the location of car crashes happened more than others. To observe this patterns, we used a map of New York State with boundaries of counties.
+<img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="2880" /></p>
+<p>The graph above shows the number of car crashes that occurred in each county in New York State, where darker color indicates more car crashes in such areas (county). We can obverse that comparing to other counties in NY, the number of car crashes occurred in counties of Manhattan Areas are much larger. More specifically, these counties are Suffolk, Queens, Nassau and Kings.
+<br>
+Note that for all car crashes, there are different severity. The measurement we choose to use is one of the variables, <code>Crash Descriptor</code>, which describes the severity of a car crashes. There are four factor levels, in the order of “Property Damage Accident”, “Injury Accident”, “Property Damage &amp; Injury Accident” and “Fatal Accident”. Next, we focus on the fatal accident in each county. The bar plot below indicates that the top 4 counties of fatal accident also the top 4 counties of total car crashes.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
 </div>
 <div id="how" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> How</h2>
 <p><strong>Top 10 Crashes Detail</strong>
-<img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="768" />
-Within the dataset, there is a variable providing the details of each crash case which give us the information of the type of collision. In total, there are 30 different situations. We pick the top 10 types which take over 80 percents of all crashes that occurred for analysis. According to the bar plot above, more than 70 percent of the crashes are collision with other motor vehicle and the following by collision with subject including Animal, Pedestrian, Bicyclist and fix objects such as Tree, Guide Rail and Sign Post.</p>
-<p><strong>Road Surface patterns correspond to these top 10 type of Crashes</strong>
-<img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="768" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="768" /></p>
-<p><strong>Combination: Lighting Conditions and Road Surface Condition</strong>
-<img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="768" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="768" />
+Within the dataset, <code>Collision Detail</code> provides the details of each crash case, which gives the direct reason of the crash. In total, there are 30 different situations. We pick the top 10 details which take over 80% of all crashes for analysis. According to the bar plot above, more than 70% of the crashes are collision with other motor vehicle and the following by Animal, Pedestrian, Bicyclist and some fix objects such as Utility Pole, Tree, Guide Rail and Sign Post.</p>
 <p><strong>Traffic Control Condition</strong></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
+<p>Traffic control devices acts an important role on help us avoid accidents. These devices gives us important information or warning to keep us safe such as traffic signal, stop signs… We can observe that for car crash occurred when traffic control devices were presented, most of collision with pedestrian, bicyclist and other motor vehicle occurred when traffic signal presented. On the other hand, most of collision with fixed objects including tree, guide rail and earth embankment/rock cut, and animals occurred in No Passing Zone. Interestingly, such patterns we observed are actually confirming the functionality of traffic control devices.</p>
+<p><br>
+Next, we assume that Road surface conditions and lighting conditions are two factors that have correlation with collision details listed above.</p>
+<p><strong>Correlation of Road Surface and Crashes Details</strong>
+<img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+<p>Through the mosaic plot above, we can see that for the top 10 Crashes details, car crashes that have collision with fixed object such as Earth Embankment/Rock Cut, Guide Rail, Tree, Light Support/Utility Pole and Sign Post are more likely to occurred under bad road conditions such as Wet, Muddy, Slush, Flooded Water or Snow/Ice comparing to collision with other motor vehicles, Animals and Bicyclist under the same road surface conditions.</p>
+<p><strong>Combination: Lighting Conditions and Road Surface Condition</strong><br />
+<img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+<p>The plot above shows the frequency of road surface condition and lighting conditions when car crashes happened.</p>
+<p>Comparing the intuitive hypothesis that car crashes should occurred more frequent under wet, snow/Ice or even worst road condition, the data shows that actually most of the car crashes accidents occurred under the dry condition. However, it is still noticeable that the number of car crashes occurred under wet or snow/ice condition still be the second and third highest among all.</p>
+<p>Similar to the road surface condition, the frequency of lighting conditions when car crashes occurred are out of our intuitive expectation. Most of the car crashes occurred under daylight instead of Dusk, Dawn or Dark-Road, which is reasonable if we think deeper since the traffic flow are much higher during the day, active time for human. This is consistent with the results in the previous “When” section. Nevertheless, it worthes noticing that the second and third highest lighting conditions when crashes occurred are lighted dark-road and unlighted dark road.</p>
+<p>Finally, we compare the lighting conditions and road surface conditions and explore their correlation in the plot below.
+<img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="768" /></p>
+<p>The stair cases in the plot indicates that there is a correlation between these two variables. For car crashes that under the Dark-Road Unlighted condition, more of them are occurring under Muddy and Snow/Ice conditions road surface condition. For car crashes that occurred under Dark-Road Lighted condition, more of them are occurring under Wet and Flooded Water road surface condition. In other words, the combination of the dark unlighted road with muddy surface, is more dangerous than combination of the dark unlighted road with other road surface conditions.</p>
+</div>
+<div id="appendix" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Appendix</h2>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="768" /><img src="finalproj_files/figure-html/unnamed-chunk-21-2.png" width="768" /><img src="finalproj_files/figure-html/unnamed-chunk-21-3.png" width="768" />
+```</p>
 
 </div>
 </div>
