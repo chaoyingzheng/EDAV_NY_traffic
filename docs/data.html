@@ -81,14 +81,14 @@
 <li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#data-sources"><i class="fa fa-check"></i><b>2.1</b> Data Sources</a></li>
-<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#columns-description"><i class="fa fa-check"></i><b>2.2</b> Columns Description</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#column-descriptions"><i class="fa fa-check"></i><b>2.2</b> Column Descriptions</a></li>
 <li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#issues-with-the-dataset"><i class="fa fa-check"></i><b>2.3</b> Issues With the Dataset</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#overviews"><i class="fa fa-check"></i><b>3.1</b> Overviews</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#change-format-of-variable-date"><i class="fa fa-check"></i><b>3.2</b> Change Format of Variable <code>Date</code></a></li>
-<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#extract-reason-of-crashing-from-variable-event-descriptor"><i class="fa fa-check"></i><b>3.3</b> Extract reason of crashing from variable <code>Event Descriptor</code></a>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#extract-reason-of-crashing-from-event-descriptor"><i class="fa fa-check"></i><b>3.3</b> Extract reason of crashing from <code>Event Descriptor</code></a>
 <ul>
 <li class="chapter" data-level="3.3.1" data-path="data-transformation.html"><a href="data-transformation.html#collision_type"><i class="fa fa-check"></i><b>3.3.1</b> <code>Collision_Type</code></a></li>
 <li class="chapter" data-level="3.3.2" data-path="data-transformation.html"><a href="data-transformation.html#collision_detail"><i class="fa fa-check"></i><b>3.3.2</b> <code>Collision_Detail</code></a></li>
@@ -107,7 +107,11 @@
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#how"><i class="fa fa-check"></i><b>5.3</b> How</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#appendix"><i class="fa fa-check"></i><b>5.4</b> Appendix</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#interactive"><i class="fa fa-check"></i><b>6.2</b> Interactive</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -136,10 +140,10 @@
 Source: <a href="https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe" class="uri">https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Information-Three-Year-/e8ky-4vqe</a></p>
 <p>The dataset we used are coming from the New York State government data website
 (www.data.ny.gov), specifically provided by the NYS Department of Motor Vehicles(DMV). Note that all crash reports processed by law enforcement personnel are forwarded to the NYS DMV for processing. The NYS Vehicle and Traffic Law require that the parties involved in any crash where injury or death occurred, or property damage in excess of $1,000 results, file a motorist crash report with the DMV. Hence, this data contains that received from both the law enforcement and motorist crash reports filed with DMV.</p>
-<p>In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.</p>
+<p>In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crash. For time period, this data set included the data within a two years window from 2018 to 2019.</p>
 </div>
-<div id="columns-description" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Columns Description</h2>
+<div id="column-descriptions" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Column Descriptions</h2>
 <p>The raw vehicle crashes data set contains of 881,617 observations with 18 variables, including the following:</p>
 <p><strong>Year</strong>: Calendar year of incident. A 4-digits number, which is either “2018” or “2019” for the given time period.<br />
 <strong>Crash Descriptor</strong>: Categorical variable, it is the reported injury or damage outcome of crash. Including “Property Damage &amp; Injury Accident”, “Fatal Accident”, “Injury Accident” and “Property Damage Accident”.<br />
@@ -162,7 +166,7 @@ Source: <a href="https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-I
 </div>
 <div id="issues-with-the-dataset" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Issues With the Dataset</h2>
-<p>With description for all 18 variables above, we can see that the data provides plenty of information regarding each case of crashes. However, according to the description of the variables, not all variables will be useful base on the problem statement and our study goals. We will have to drop some irrelevant variables before proceeding to the analysis.</p>
+<p>With description for all 18 variables above, we can see that the data provides plenty of information regarding each case. Base on the problem statement and our study goals, not all variables will be useful, so some irrelevant variables are dropped before proceeding to the analysis. For data cleaning details, please read the data transformation section.</p>
 
 </div>
 </div>

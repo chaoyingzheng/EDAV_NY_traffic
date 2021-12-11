@@ -3,12 +3,12 @@ background
 problem-statement
 data
 data-sources
-columns-description
+column-descriptions
 issues-with-the-dataset
 data-transformation
 overviews
 change-format-of-variable-date
-extract-reason-of-crashing-from-variable-event-descriptor
+extract-reason-of-crashing-from-event-descriptor
 collision_type
 collision_detail
 convert-to-factor-level
@@ -21,4 +21,6 @@ where
 how
 appendix
 interactive-component
+introduction-1
+interactive
 conclusion

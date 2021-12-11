@@ -81,14 +81,14 @@
 <li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#data-sources"><i class="fa fa-check"></i><b>2.1</b> Data Sources</a></li>
-<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#columns-description"><i class="fa fa-check"></i><b>2.2</b> Columns Description</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#column-descriptions"><i class="fa fa-check"></i><b>2.2</b> Column Descriptions</a></li>
 <li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#issues-with-the-dataset"><i class="fa fa-check"></i><b>2.3</b> Issues With the Dataset</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#overviews"><i class="fa fa-check"></i><b>3.1</b> Overviews</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#change-format-of-variable-date"><i class="fa fa-check"></i><b>3.2</b> Change Format of Variable <code>Date</code></a></li>
-<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#extract-reason-of-crashing-from-variable-event-descriptor"><i class="fa fa-check"></i><b>3.3</b> Extract reason of crashing from variable <code>Event Descriptor</code></a>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#extract-reason-of-crashing-from-event-descriptor"><i class="fa fa-check"></i><b>3.3</b> Extract reason of crashing from <code>Event Descriptor</code></a>
 <ul>
 <li class="chapter" data-level="3.3.1" data-path="data-transformation.html"><a href="data-transformation.html#collision_type"><i class="fa fa-check"></i><b>3.3.1</b> <code>Collision_Type</code></a></li>
 <li class="chapter" data-level="3.3.2" data-path="data-transformation.html"><a href="data-transformation.html#collision_detail"><i class="fa fa-check"></i><b>3.3.2</b> <code>Collision_Detail</code></a></li>
@@ -107,7 +107,11 @@
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#how"><i class="fa fa-check"></i><b>5.3</b> How</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#appendix"><i class="fa fa-check"></i><b>5.4</b> Appendix</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#interactive"><i class="fa fa-check"></i><b>6.2</b> Interactive</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -132,7 +136,7 @@
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
 <div id="overviews" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Overviews</h2>
-<p>Here is the overview of columns we need for this project before cleaning. First, variable <code>Date</code> need to convert to class <code>Date</code> in format “Year-Month-Day”. Second, variable <code>Event Descriptor</code> will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor.</p>
+<p>Here is the overview of columns we need for this project before cleaning. First, <code>Date</code> need to convert to class <code>Date</code> in format “Year-Month-Day”. Second, <code>Event Descriptor</code> will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor.</p>
 <pre><code>## tibble [881,617 x 14] (S3: tbl_df/tbl/data.frame)
 ##  $ Year                       : num [1:881617] 2019 2019 2019 2019 2019 ...
 ##  $ Crash Descriptor           : chr [1:881617] &quot;Property Damage Accident&quot; &quot;Property Damage Accident&quot; &quot;Property Damage Accident&quot; &quot;Property Damage &amp; Injury Accident&quot; ...
@@ -152,19 +156,19 @@
 </div>
 <div id="change-format-of-variable-date" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Change Format of Variable <code>Date</code></h2>
-<p>Here is the view of variable <code>Date</code> before the transformation.</p>
+<p>Here is the view of <code>Date</code> before the transformation.</p>
 <pre><code>## [1] &quot;12/31/2019&quot;</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
-<p>Here is the view of variable <code>Date</code> after the transformation.</p>
+<p>Here is the view of <code>Date</code> after the transformation.</p>
 <pre><code>## [1] &quot;2019-12-31&quot;</code></pre>
 <pre><code>## [1] &quot;Date&quot;</code></pre>
 </div>
-<div id="extract-reason-of-crashing-from-variable-event-descriptor" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Extract reason of crashing from variable <code>Event Descriptor</code></h2>
+<div id="extract-reason-of-crashing-from-event-descriptor" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Extract reason of crashing from <code>Event Descriptor</code></h2>
 <div id="collision_type" class="section level3" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> <code>Collision_Type</code></h3>
-<p>Following it the current levels in <code>Event Descriptor</code>. For generalization, new variable <code>Collision_Type</code> is introduced to indicate the high-level collision type: “Collision With Fixed Object”, “Collision With Unfixed Object” (will be shortened as “Collision With” in the table), and “Non-collision”</p>
-<p>For generating new variable <code>Collision_Type</code>, two changes needed:
+<p>Following it the current levels in <code>Event Descriptor</code>. For generalization, new variable <code>Collision_Type</code> is introduced to indicate the high-level collision type: “Collision With Fixed Object”, “Collision With subject” (will be shortened as “Collision With” in the table), and “Non-collision”</p>
+<p>For generating new variable <code>Collision_Type</code>, two changes needed in <code>Event Descriptor</code>:
 1. “Deer” can be included in “Animal, Collision With”
 2. “Other Pedestrian” can be included in “Other Pedestrian, Collision With”</p>
 <pre><code>##  [1] &quot;Animal, Collision With&quot;                                      
@@ -199,7 +203,7 @@
 ## [30] &quot;Snow Embankment, Collision With Fixed Object&quot;                
 ## [31] &quot;Submersion, Non-Collision&quot;                                   
 ## [32] &quot;Tree, Collision With Fixed Object&quot;</code></pre>
-<p>After cleaning and extracting keywords from <code>Event Descriptor</code>, here are the levels for variable <code>Collision_Type</code>:</p>
+<p>After cleaning and extracting keywords from <code>Event Descriptor</code>, here are the levels for <code>Collision_Type</code>:</p>
 <pre><code>## [1] &quot; Collision With&quot;              &quot; Collision With Fixed Object&quot;
 ## [3] &quot; Non-Collision&quot;</code></pre>
 </div>

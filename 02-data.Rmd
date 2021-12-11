@@ -8,10 +8,10 @@ Source: https://data.ny.gov/Transportation/Motor-Vehicle-Crashes-Case-Informatio
   The dataset we used are coming from the New York State government data website
 (www.data.ny.gov), specifically provided by the NYS Department of Motor Vehicles(DMV). Note that all crash reports processed by law enforcement personnel are forwarded to the NYS DMV for processing. The NYS Vehicle and Traffic Law require that the parties involved in any crash where injury or death occurred, or property damage in excess of $1,000 results, file a motorist crash report with the DMV. Hence, this data contains that received from both the law enforcement and motorist crash reports filed with DMV.  
 
-  In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crashes. For time period, this data set included the data within a three years window between 2018 and 2019.  
+  In terms of the contents, the data provides statewide information about the location, environment conditions, detailed time period and event descriptions for each car crash. For time period, this data set included the data within a two years window from 2018 to 2019.  
 
 
-## Columns Description
+## Column Descriptions
 The raw vehicle crashes data set contains of 881,617 observations with 18 variables, including the following:  
 
 **Year**: Calendar year of incident. A 4-digits number, which is either "2018" or "2019" for the given time period.  
@@ -35,5 +35,5 @@ The raw vehicle crashes data set contains of 881,617 observations with 18 variab
 
 
 ## Issues With the Dataset
-With description for all 18 variables above, we can see that the data provides plenty of information regarding each case of crashes. However, according to the description of the variables, not all variables will be useful base on the problem statement and our study goals. We will have to drop some irrelevant variables before proceeding to the analysis. 
+With description for all 18 variables above, we can see that the data provides plenty of information regarding each case. Base on the problem statement and our study goals, not all variables will be useful, so some irrelevant variables are dropped before proceeding to the analysis. For data cleaning details, please read the data transformation section. 
 

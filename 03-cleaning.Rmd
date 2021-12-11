@@ -13,7 +13,7 @@ cash_information <- subset(cash_information_raw,
 ```
 
 
-Here is the overview of columns we need for this project before cleaning. First, variable `Date` need to convert to class `Date` in format "Year-Month-Day". Second, variable `Event Descriptor` will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor. 
+Here is the overview of columns we need for this project before cleaning. First, `Date` need to convert to class `Date` in format "Year-Month-Day". Second, `Event Descriptor` will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor. 
 
 ```{r echo=FALSE}
 str(cash_information)
@@ -21,12 +21,12 @@ str(cash_information)
 
 ## Change Format of Variable `Date` 
 
-Here is the view of variable `Date` before the transformation. 
+Here is the view of `Date` before the transformation. 
 ```{r echo=FALSE}
 print(cash_information$Date[1])
 print(class(cash_information$Date))
 ```
-Here is the view of variable `Date` after the transformation. 
+Here is the view of `Date` after the transformation. 
 ```{r  echo=FALSE}
 # transform variable `Date` to date format
 cash_information$Date <- as.Date(cash_information$Date, format="%m/%d/%Y")
@@ -34,12 +34,12 @@ print(cash_information$Date[1])
 print(class(cash_information$Date))
 ```
 
-## Extract reason of crashing from variable `Event Descriptor`
+## Extract reason of crashing from `Event Descriptor`
 
 ### `Collision_Type`
-Following it the current levels in `Event Descriptor`. For generalization, new variable `Collision_Type` is introduced to indicate the high-level collision type: "Collision With Fixed Object", "Collision With Unfixed Object" (will be shortened as "Collision With" in the table), and "Non-collision"
+Following it the current levels in `Event Descriptor`. For generalization, new variable `Collision_Type` is introduced to indicate the high-level collision type: "Collision With Fixed Object", "Collision With subject" (will be shortened as "Collision With" in the table), and "Non-collision"
 
-For generating new variable `Collision_Type`, two changes needed:
+For generating new variable `Collision_Type`, two changes needed in `Event Descriptor`:
 1. "Deer" can be included in "Animal, Collision With" 
 2. "Other Pedestrian" can be included in "Other Pedestrian, Collision With"
 
@@ -55,7 +55,7 @@ cash_information <- cash_information %>%
   mutate(`Event Descriptor` = ifelse(`Event Descriptor`=="Other Pedestrian", "Other Pedestrian, Collision With",`Event Descriptor`))
 ```
 
-After cleaning and extracting keywords from `Event Descriptor`, here are the levels for variable `Collision_Type`:
+After cleaning and extracting keywords from `Event Descriptor`, here are the levels for `Collision_Type`:
 ```{r echo=FALSE}
 
 # reference code for analyzing only

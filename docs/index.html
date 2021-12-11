@@ -81,14 +81,14 @@
 <li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#data-sources"><i class="fa fa-check"></i><b>2.1</b> Data Sources</a></li>
-<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#columns-description"><i class="fa fa-check"></i><b>2.2</b> Columns Description</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#column-descriptions"><i class="fa fa-check"></i><b>2.2</b> Column Descriptions</a></li>
 <li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#issues-with-the-dataset"><i class="fa fa-check"></i><b>2.3</b> Issues With the Dataset</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#overviews"><i class="fa fa-check"></i><b>3.1</b> Overviews</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#change-format-of-variable-date"><i class="fa fa-check"></i><b>3.2</b> Change Format of Variable <code>Date</code></a></li>
-<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#extract-reason-of-crashing-from-variable-event-descriptor"><i class="fa fa-check"></i><b>3.3</b> Extract reason of crashing from variable <code>Event Descriptor</code></a>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#extract-reason-of-crashing-from-event-descriptor"><i class="fa fa-check"></i><b>3.3</b> Extract reason of crashing from <code>Event Descriptor</code></a>
 <ul>
 <li class="chapter" data-level="3.3.1" data-path="data-transformation.html"><a href="data-transformation.html#collision_type"><i class="fa fa-check"></i><b>3.3.1</b> <code>Collision_Type</code></a></li>
 <li class="chapter" data-level="3.3.2" data-path="data-transformation.html"><a href="data-transformation.html#collision_detail"><i class="fa fa-check"></i><b>3.3.2</b> <code>Collision_Detail</code></a></li>
@@ -107,7 +107,11 @@
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#how"><i class="fa fa-check"></i><b>5.3</b> How</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#appendix"><i class="fa fa-check"></i><b>5.4</b> Appendix</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#interactive"><i class="fa fa-check"></i><b>6.2</b> Interactive</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -138,14 +142,13 @@
 <div id="background" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Background</h2>
 <p>According to the National Safety Council, the number of motor-vehicle deaths (which include all types of motor vehicles) in the United States increased 831% within about 100 years, from 4200 deaths in 1913 to 39107 in 2019. Up to 2019, the population motor-vehicle death rate in the United States was 11.9 per 100,000 population. Indeed, road crashes are the leading cause of death in the U.S. for people aged between 1 and 54. <br></p>
-<p>Instead of the whole country, we will focus on studying the traffic accidents happened in New York State specifically, considered that motor vehicle traffic injuries are not only the leading cause of injury related death, but also the second leading cause of injury related hospitalizations and third leading cause for injury related emergency department visits in New York State. Stated by the NY State government, on average, three New Yorkers die every day due to traffic-related cars. While none of us can completely protect ourselves against the odds of being in an auto accident, simple awareness of the danger can help us all remain safer on the roads. Through exploratory data analysis and visualization, we will try figuring out the answers the problems related to traffic accidents that are stated in the following section. We believe the answers to problems could help people building up their awareness, leading to decline in motor vehicle crashes.</p>
+<p>Instead of the whole country, we will focus on studying the traffic accidents happened in New York State specifically, considered that motor vehicle traffic injuries are not only the leading cause of injury related death, but also the second leading cause of injury related hospitalizations and third leading cause for injury related emergency department visits in New York State. Stated by the NY State government, on average, three New Yorkers die every day due to traffic-related cars. While none of us can completely protect ourselves against the odds of being in an auto accident, simple awareness of the danger can help us all remain safer on the roads. Through exploratory data analysis and visualization, we will try figuring out the answers the problems related to traffic accidents that are stated in the following section. We believe discover can help people building up their awareness, leading to decline in motor vehicle crashes.</p>
 </div>
 <div id="problem-statement" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Problem Statement</h2>
 <ol style="list-style-type: decimal">
 <li>Where and When car crashes happen the most in New York? Which month in a year, which day in a week, etc. For example, is there a day in the week that a motor vehicle crash is more likely to happen?</li>
-<li>What are the most frequent events (reasons) of motor vehicle crashes? What are the common patterns of the road, light and weather conditions? Will the proportion of different types of crashes vary by year?</li>
-<li>What’s the severity of the car crashes? How many people were injured or died in the car crashes?</li>
+<li>What are the most frequent events (reasons) of motor vehicle crashes? What are the common patterns of the road, light and weather conditions? What’s the correlation between these variables?</li>
 </ol>
 
 </div>
