@@ -388,7 +388,7 @@ ggplot(df_collision, aes(x = RelFreq, y = fct_reorder(Collision_Detail, Freq, .d
   geom_col() + 
   scale_fill_manual(values = fillcolors) + 
   labs(x = "Proportion", y = "Collision Detail") +
-  ggtitle("Road Surface Condition V.S. Top 10 Crashes Details") + 
+  ggtitle("Road Surface Condition V.S. Top 10 Crashes Details ") + 
   theme_classic()
 
 ```
