@@ -116,7 +116,7 @@
 <ul>
 <li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#main-takeaway"><i class="fa fa-check"></i><b>7.1</b> Main Takeaway</a></li>
 <li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#limitation"><i class="fa fa-check"></i><b>7.2</b> Limitation</a></li>
-<li class="chapter" data-level="7.3" data-path="conclusion.html"><a href="conclusion.html#feature-work"><i class="fa fa-check"></i><b>7.3</b> Feature Work</a></li>
+<li class="chapter" data-level="7.3" data-path="conclusion.html"><a href="conclusion.html#future-work"><i class="fa fa-check"></i><b>7.3</b> Future Work</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -142,7 +142,7 @@
 <div id="overviews" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Overviews</h2>
 <p>Here is the overview of columns we need for this project before cleaning. First, <code>Date</code> need to convert to class <code>Date</code> in format “Year-Month-Day”. Second, <code>Event Descriptor</code> will be convert into two new variables to narrow down the information contains in single variable. Finally, all variables under type character will be transformed as factor.</p>
-<pre><code>## tibble [881,617 × 14] (S3: tbl_df/tbl/data.frame)
+<pre><code>## tibble [881,617 x 14] (S3: tbl_df/tbl/data.frame)
 ##  $ Year                       : num [1:881617] 2019 2019 2019 2019 2019 ...
 ##  $ Crash Descriptor           : chr [1:881617] &quot;Property Damage Accident&quot; &quot;Property Damage Accident&quot; &quot;Property Damage Accident&quot; &quot;Property Damage &amp; Injury Accident&quot; ...
 ##  $ Time                       : &#39;hms&#39; num [1:881617] 17:14:00 22:08:00 14:50:00 22:50:00 ...
@@ -252,7 +252,7 @@
 <div id="convert-to-factor-level" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span> Convert to Factor Level</h2>
 <p>Finally, all the variable type convert to factor level for our further data analysis. Here is the table sumamary:</p>
-<pre><code>## tibble [881,617 × 16] (S3: tbl_df/tbl/data.frame)
+<pre><code>## tibble [881,617 x 16] (S3: tbl_df/tbl/data.frame)
 ##  $ Year                       : num [1:881617] 2019 2019 2019 2019 2019 ...
 ##  $ Crash Descriptor           : Factor w/ 4 levels &quot;Fatal Accident&quot;,..: 4 4 4 3 3 4 4 3 4 4 ...
 ##  $ Time                       : &#39;hms&#39; num [1:881617] 17:14:00 22:08:00 14:50:00 22:50:00 ...

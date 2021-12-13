@@ -2,9 +2,9 @@
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(readr)
-#df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
+df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-df <- read_csv("~/Downloads/cash_information_clean.csv")
+# df <- read_csv("~/Downloads/cash_information_clean.csv")
 
 #df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```

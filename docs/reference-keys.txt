@@ -26,4 +26,4 @@ interactive
 conclusion
 main-takeaway
 limitation
-feature-work
+future-work
