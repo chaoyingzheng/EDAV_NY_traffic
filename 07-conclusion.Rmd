@@ -12,7 +12,6 @@ Within the vehicle accidents we observed in the data, around 70% of them are col
 All in all, people should be careful when driving under high traffic flow time periods, taking care of the overall traffic environment including weather, lighting, road surface conditions and other motor vehicles on roads, as well as paying attention to the traffic device. As what we mentioned at the beginning, none of us can completely protect ourselves against the odds of being in an auto accident, but taking the lesson from the data can help us all remain safer on the roads.
 
 
-
 ## Limitation
 Note that the dataset we used for this project contains data received from both the law enforcement and motorist crash reports filed with DMV. DMV is solely the collector of the data, which they do not affect the accuracy of what is reported to them. Since part of the data are coming from self-report files, there could exist some self-report bias within the data. 
 
