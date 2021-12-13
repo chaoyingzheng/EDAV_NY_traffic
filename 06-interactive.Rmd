@@ -1,7 +1,7 @@
 # Interactive component
 
 ## Introduction
-In this section, you can explore the frequency of each collision detail, which is also known as the direct reason of car crash. By clicking the add bar button, the next higher collision detail will appear in the left of the histogram, while the remove bar button will remove the highest bar in the current plot. There are total 30 details in the plot. Notice that the y-axis value will change as the frequency increases or decrease, since the difference between the most frequent and least collision detail is large.  
+In this section, you can explore the frequency of each collision detail, which is also known as the direct reason of car crash. In other words, what type of object or subjects did the vehicles collision with? Or if non-collision, then why the accidents occurred such as "Ran of Roadway", "Overturned" etc. By clicking the add bar button, the next higher collision detail will appear in the left of the histogram, while the remove bar button will remove the highest bar in the current plot. There are total 30 details in the plot. Notice that the y-axis value will change as the frequency increases or decrease, since the difference between the most frequent and least collision detail is large.  
 
 **Note: ** After clicking the add bar button up to the point where the highest collision detail showed in the plot, the plot won't change further by clicking the add bar button. One can keep using the plot by clicking the romove bar button a few times until seeing bars get removed from plot.
 

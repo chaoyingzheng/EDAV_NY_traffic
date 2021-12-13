@@ -2,9 +2,9 @@
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(readr)
-df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
+#df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-#df <- read.csv("~/Downloads/cash_information_clean.csv")
+df <- read_csv("~/Downloads/cash_information_clean.csv")
 
 #df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```
@@ -252,7 +252,8 @@ In the first plot, we can obverse that for the car crashes that occurred during 
 The second plot shows the proportion of weather conditions when the car crashes occurred, we can observe that around 10% to 18% of car crashes occurred in November, December and January are under the "Snow" or "Sleet/Hail/Freezing Rain" conditions. Since the weather condition varies objective to the time period (season) during a year, we cannot infer whether the higher number of crashes in winter are due to change of weather.
     
 ## Where
-New York State covers a total area of 54,555 square miles and contains in total 62 counties. Considering the large area, it is helpful to see further that where the location of car crashes happened more than others. To observe this patterns, we used a map of New York State with boundaries of counties.
+New York State covers a total area of 54,555 square miles and contains in total 62 counties. Considering the large area, it is helpful to see further that where the location of car crashes happened more than others. To observe this patterns, we used a map of New York State with boundaries of counties.    
+    
 ```{r echo=FALSE, fig.height=20, fig.width=30, message=FALSE, warning=FALSE}
 ny_county <- subset(map_data("county"), region == "new york") 
   
@@ -277,9 +278,15 @@ ggplot(aes(x=long, y=lat)) +
   geom_polygon(aes(group = group, fill=n), color = "grey") +
   with(lower_state, annotate(geom="text", x = long, y = lat,
                              label=subregion, size=2)) +
-  labs(title = "Long Island Details", x = "longitude", y = "latitude") +
-  scale_fill_gradient(low="white", high="darkgreen") +
-  theme(panel.background = element_blank()) 
+  labs(title = "Long Island Details", x = "Longitude", y = "Latitude", fill = "Frequency") +
+  scale_fill_gradient(low="white", high="darkorchid4") +
+  theme(panel.background = element_blank(), 
+        legend.key.size = unit(1, 'cm'), 
+        legend.title = element_text(size = 21),
+        legend.text = element_text(size = 19),
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=19),
+        plot.title = element_text(size=31)) 
 
 ny_county_distinct <- ny_county %>% 
   group_by(subregion) %>% 
@@ -289,9 +296,18 @@ ggplot(data=df_county, aes(x=long, y=lat)) +
   geom_polygon(aes(group = group, fill=n), color = "grey") +
   with(ny_county_distinct, annotate(geom="text", x = long, y = lat, 
                                     label=subregion, size=3)) +
-  labs(title = "New York State Crash by Counties", x = "longitude", y = "latitude") +
+  labs(title = "New York State Crash by Counties", 
+       x = "Longitude", 
+       y = "Latitude", 
+       fill = "Frequency") +
   scale_fill_gradient(low="white", high="darkgreen") +
-  theme(panel.background = element_blank(), plot.title = element_text(hjust = 0.5)) +
+  theme(panel.background = element_blank(), 
+        legend.key.size = unit(2, 'cm'),
+        legend.title = element_text(size = 19),
+        legend.text = element_text(size = 16),
+        plot.title = element_text(hjust = 0.4, size = 41), 
+        axis.text=element_text(size= 20),
+        axis.title=element_text(size=30)) +
   inset_element(embed_plot,0.01, 0.01, 0.35, 0.35)
 ```
 
@@ -307,7 +323,7 @@ df_CF <- df_fetal %>%
   group_by(`County Name`) %>%
   summarize(n = n()) 
 ggplot(df_CF, aes(y = fct_reorder(`County Name`, n, .desc = FALSE), x=n)) + 
-  geom_col(fill="Purple", alpha = 0.9) +
+  geom_col(fill="darkred", alpha = 0.9) +
   labs(y="County", x="Frequency") + 
   ggtitle("Frequency of Fatal Accident in County") + 
   theme_classic()
