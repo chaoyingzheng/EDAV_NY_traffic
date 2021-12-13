@@ -2,9 +2,9 @@
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(readr)
-df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
+#df <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information_clean.csv")
 
-#df <- read_csv("~/Downloads/cash_information_clean.csv")
+df <- read_csv("~/Downloads/cash_information_clean.csv")
 
 #df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
 ```
@@ -252,7 +252,8 @@ In the first plot, we can obverse that for the car crashes that occurred during 
 The second plot shows the proportion of weather conditions when the car crashes occurred, we can observe that around 10% to 18% of car crashes occurred in November, December and January are under the "Snow" or "Sleet/Hail/Freezing Rain" conditions. Since the weather condition varies objective to the time period (season) during a year, we cannot infer whether the higher number of crashes in winter are due to change of weather.
     
 ## Where
-New York State covers a total area of 54,555 square miles and contains in total 62 counties. Considering the large area, it is helpful to see further that where the location of car crashes happened more than others. To observe this patterns, we used a map of New York State with boundaries of counties.
+New York State covers a total area of 54,555 square miles and contains in total 62 counties. Considering the large area, it is helpful to see further that where the location of car crashes happened more than others. To observe this patterns, we used a map of New York State with boundaries of counties.    
+    
 ```{r echo=FALSE, fig.height=20, fig.width=30, message=FALSE, warning=FALSE}
 ny_county <- subset(map_data("county"), region == "new york") 
   

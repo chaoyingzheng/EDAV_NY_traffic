@@ -24,3 +24,6 @@ interactive-component
 introduction-1
 interactive
 conclusion
+main-takeaway
+limitation
+feature-work

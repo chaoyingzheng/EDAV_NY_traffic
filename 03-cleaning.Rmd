@@ -5,7 +5,9 @@
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
 library(readr)
-cash_information_raw <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information.csv")
+#cash_information_raw <- read_csv("C:/Users/chaoy/Desktop/Fall2021/5702_EDAV/finalproject_data/cash_information.csv")
+
+cash_information_raw <- read_csv("~/Desktop/EDAV_STATW5702/Final Project/Dataset/Motor_Vehicle_Crashes_-_Case_Information__Three_Year_Window.csv")
 
 # drop columns
 cash_information <- subset(cash_information_raw, 
